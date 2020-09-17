@@ -1,8 +1,8 @@
 import React from 'react';
 import {Box, Text} from 'react-native-design-utility';
 import {SearchStackRouteParamsList} from "../../navigators/types";
-import {RouteProp, useRoute} from '@react-navigation/native';
-import {ActivityIndicator, FlatList, Image, StyleSheet} from "react-native";
+import {RouteProp, useRoute, useNavigation} from '@react-navigation/native';
+import {ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import {theme} from "../../constants/theme";
@@ -10,10 +10,13 @@ import {useQuery} from "@apollo/react-hooks";
 import feedQuery from "../../graphql/query/feedQuery";
 import {FeedQuery, FeedQueryVariables} from "../../types/graphql";
 import {getMonth, getWeekDay, humanDuration} from "../../lib/dateTimeHelpers";
+import {usePlayerContext} from "../../context/PlayerContext";
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 
 const PodcastDetailsScreen = () => {
+  const playerContext = usePlayerContext();
+  const navigation = useNavigation();
   const {data: podcastData} = useRoute<NavigationParams>().params ?? {};
 
   const {data, loading} = useQuery<FeedQuery, FeedQueryVariables>(feedQuery, {
@@ -41,11 +44,27 @@ const PodcastDetailsScreen = () => {
             </Box>
             <Box px="sm" mb="lg" dir="row" align="center">
               <Box mr="sm">
-                <FontAwesome5 name={"play"} size={30} color={theme.color.primary} />
+                <TouchableOpacity onPress={() => {
+                  const elt = data?.feed[0];
+
+                  if (!elt) {
+                    return
+                  }
+
+                  playerContext.play({
+                    id: elt.linkUrl,
+                    title: elt.title,
+                    artwork: elt.image ?? podcastData.thumbnail,
+                    url: elt.linkUrl,
+                    artist: podcastData.artist
+                  })
+                }}>
+                  <FontAwesome5 name={"play"} size={30} color={theme.color.primary} />
+                </TouchableOpacity>
               </Box>
              <Box f={1}>
-               <Text color="white" bold>Ecouter le dernier épisode</Text>
-               <Text color="primary" size="sm">{data?.feed[0].title}</Text>
+               <Text color="primary" bold>Lancer le dernier épisode</Text>
+               <Text color="white" size="sm">{data?.feed[0].title}</Text>
              </Box>
             </Box>
             <Box px="sm" mb="md">
@@ -65,20 +84,22 @@ const PodcastDetailsScreen = () => {
           </Box>
         }
         renderItem={({item}) => (
-          <Box px="sm">
-            <Text size="sm" color="grey">
-              {getWeekDay(new Date(item.pubDate))} {new Date(item.pubDate).getDate()} {getMonth(new Date(item.pubDate))} {new Date(item.pubDate).getFullYear()}
-            </Text>
-            <Text bold color="primary">
-              {item.title}
-            </Text>
-            <Text size="xs" color="white" numberOfLines={2}>
-              {item.description}
-            </Text>
-            <Text size="sm" color="grey">
-              {humanDuration(item.duration)}
-            </Text>
-          </Box>
+          <TouchableOpacity onPress={() => navigation.navigate('EpisodeDetails', {episode: item, podcast: podcastData})}>
+            <Box px="sm">
+              <Text size="sm" color="primary">
+                {getWeekDay(new Date(item.pubDate))} {new Date(item.pubDate).getDate()} {getMonth(new Date(item.pubDate))} {new Date(item.pubDate).getFullYear()}
+              </Text>
+              <Text bold color="white">
+                {item.title}
+              </Text>
+              <Text size="xs" color="grey" numberOfLines={2}>
+                {item.description}
+              </Text>
+              <Text size="sm" color="primary">
+                {humanDuration(item.duration)}
+              </Text>
+            </Box>
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.linkUrl}
       />

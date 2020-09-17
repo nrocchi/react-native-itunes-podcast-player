@@ -74,21 +74,25 @@ export const getMonth = (date : Date): MonthEnum => {
 
 export const humanDuration = (duration: string): string => {
   // 03:13:00
-  let [h, m] = duration.split(':');
+  const durationSplit = duration.split(':');
+  const [h, m] = durationSplit;
+
+  if (durationSplit.length === 2) {
+    const [m] = durationSplit;
+    return `${Number(m)}min`;
+  }
+
+  if (m === undefined || m === '' || h === undefined || h === '') {
+    return ``;
+  }
 
   if (h === '00' || h === undefined || h === '') {
-    h = ``;
-  }
-  else {
-    h = `${Number(h)}h `;
+    return `${Number(m)}min`;
   }
 
-  if (m === undefined || m === '') {
-    m = ``;
-  }
-  else {
-    m = `${Number(m)}min`;
+  if (m === '00' || m === undefined || m === '') {
+    return `${Number(h)}h`;
   }
 
-  return `${h}${m}`;
+  return `${Number(h)}h ${Number(m)}min`;
 };

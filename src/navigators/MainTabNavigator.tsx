@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabBar } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -8,25 +8,52 @@ import ListenNowScreen from '../components/listen_now/ListenNowScreen';
 import LibraryScreen from '../components/library/LibraryScreen';
 import SearchScreen from '../components/search/SearchScreen';
 import PodcastDetailsScreen from "../components/podcast_details/PodcastDetailsScreen";
+import MiniPlayer from "../components/mini_player/MiniPlayer";
+import EpisodeDetailsScreen from "../components/episode_details/EpisodeDetailsScreen";
 
 const MainTab = createBottomTabNavigator();
 
 const ListenNowStack = createStackNavigator();
 const LibraryStack = createStackNavigator();
 const SearchStack = createStackNavigator();
+const PodcastStack = createStackNavigator();
+
+const PodcastStackNavigator = () => {
+  return (
+    <PodcastStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: theme.color.blackLight,
+      },
+      headerTintColor: theme.color.primary,
+      headerTitleStyle: {
+        fontWeight: 'normal',
+        color: theme.color.white
+      },
+      headerTitleAlign: 'center'
+    }}>
+      <PodcastStack.Screen
+        options={{
+          title: ''
+        }}
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
+      />
+      <PodcastStack.Screen
+        options={{
+          title: ''
+        }}
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
+      />
+    </PodcastStack.Navigator>
+  )
+};
 
 const ListenNowStackNavigator = () => {
   return (
     <ListenNowStack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.color.blackLight,
-        },
-        headerTintColor: theme.color.white,
-        headerTitleStyle: {
-          fontWeight: 'normal',
-        },
-        headerTitleAlign: 'center'
+        headerShown: false
       }}>
       <ListenNowStack.Screen
         options={{
@@ -43,14 +70,7 @@ const LibraryStackNavigator = () => {
   return (
     <LibraryStack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.color.blackLight,
-        },
-        headerTintColor: theme.color.white,
-        headerTitleStyle: {
-          fontWeight: 'normal',
-        },
-        headerTitleAlign: 'center'
+        headerShown: false
       }}>
       <LibraryStack.Screen
         options={{
@@ -67,15 +87,7 @@ const SearchStackNavigator = () => {
   return (
     <SearchStack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.color.blackLight,
-        },
-        headerTintColor: theme.color.primary,
-        headerTitleStyle: {
-          fontWeight: 'normal',
-          color: theme.color.white
-        },
-        headerTitleAlign: 'center'
+        headerShown: false
       }}>
       <SearchStack.Screen
         options={{
@@ -86,10 +98,11 @@ const SearchStackNavigator = () => {
       />
       <SearchStack.Screen
         options={{
-          title: ''
+          title: '',
+          headerBackTitle: 'Retour'
         }}
         name="PodcastDetails"
-        component={PodcastDetailsScreen}
+        component={PodcastStackNavigator}
       />
     </SearchStack.Navigator>
   )
@@ -98,6 +111,12 @@ const SearchStackNavigator = () => {
 const MainTabNavigator = () => {
   return (
     <MainTab.Navigator
+      tabBar={(tabsProps) => (
+        <>
+          <MiniPlayer />
+          <BottomTabBar {...tabsProps} />
+        </>
+      )}
       tabBarOptions={{
         activeBackgroundColor: theme.color.blackLight,
         inactiveBackgroundColor: theme.color.blackLight,

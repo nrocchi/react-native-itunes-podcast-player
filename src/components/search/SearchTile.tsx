@@ -13,24 +13,24 @@ const SearchTile: React.FC<Props> = (props: { item: SearchQuery_search }) => {
 
   const navigation = useNavigation();
 
-  return <Box h={90} dir="row" align="center" px="sm" bg="black">
-    <Box h={70} w={70} mr={10} radius={5} bg="primary">
-      {props.item.thumbnail && <Image source={{uri: props.item.thumbnail}} style={s.img}/>}
-    </Box>
-    <Box f={1}>
-      <Text color="white" bold>
-        {props.item.podcastName}
-      </Text>
-      <Text color="grey" size="xs">
-        {props.item.artist}
-      </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('PodcastDetails', {data: props.item})}>
-        <Text color="primary" size="xs" >
-          {props.item.episodesCount} episodes
+  return <TouchableOpacity onPress={() => navigation.navigate('PodcastDetails', {screen: 'PodcastDetails', params: {data: props.item}})}>
+    <Box h={90} dir="row" align="center" px="sm" bg="black">
+      <Box h={70} w={70} mr={10} radius={5} bg="primary">
+        {props.item.thumbnail && <Image source={{uri: props.item.thumbnail}} style={s.img}/>}
+      </Box>
+      <Box f={1}>
+        <Text color="white" bold numberOfLines={1}>
+          {props.item.podcastName}
         </Text>
-      </TouchableOpacity>
+        <Text color="grey" size="xs" numberOfLines={1}>
+          {props.item.artist}
+        </Text>
+          <Text color="primary" size="xs" >
+            {props.item.episodesCount} episodes
+          </Text>
+      </Box>
     </Box>
-  </Box>;
+  </TouchableOpacity>;
 };
 
 const s = StyleSheet.create({

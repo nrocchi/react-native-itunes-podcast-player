@@ -55,26 +55,14 @@ const SearchScreen = () => {
           keyboardShouldPersistTaps="never"
           contentContainerStyle={s.listContentContainer}
           data={data?.search ?? []}
-          ListHeaderComponent={
-            <>
-              {loading && (
-                <SearchLoader />
-              )}
-            </>
-          }
-          ListEmptyComponent={
-            <>
-              {!loading && (
-                <SearchEmpty />
-              )}
-            </>
-          }
+          ListHeaderComponent={<>{loading && (<SearchLoader />)}</>}
+          ListEmptyComponent={<>{!loading && (<SearchEmpty />)}</>}
           keyExtractor={(item) => String(item.feedUrl)}
           renderItem={({item}) => (<SearchTile item={item}/>)}
         />
       )}
     </Box>
-  )
+  );
 };
 
 const s = StyleSheet.create({
