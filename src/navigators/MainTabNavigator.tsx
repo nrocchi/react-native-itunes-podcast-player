@@ -16,38 +16,6 @@ const MainTab = createBottomTabNavigator();
 const ListenNowStack = createStackNavigator();
 const LibraryStack = createStackNavigator();
 const SearchStack = createStackNavigator();
-const PodcastStack = createStackNavigator();
-
-const PodcastStackNavigator = () => {
-  return (
-    <PodcastStack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: theme.color.blackLight,
-      },
-      headerTintColor: theme.color.primary,
-      headerTitleStyle: {
-        fontWeight: 'normal',
-        color: theme.color.white
-      },
-      headerTitleAlign: 'center'
-    }}>
-      <PodcastStack.Screen
-        options={{
-          title: ''
-        }}
-        name="PodcastDetails"
-        component={PodcastDetailsScreen}
-      />
-      <PodcastStack.Screen
-        options={{
-          title: ''
-        }}
-        name="EpisodeDetails"
-        component={EpisodeDetailsScreen}
-      />
-    </PodcastStack.Navigator>
-  )
-};
 
 const ListenNowStackNavigator = () => {
   return (
@@ -87,22 +55,36 @@ const SearchStackNavigator = () => {
   return (
     <SearchStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerStyle: {
+          backgroundColor: theme.color.blackLight,
+        },
+        headerTintColor: theme.color.primary,
+        headerTitleStyle: {
+          fontWeight: 'normal',
+          color: theme.color.white
+        },
+        headerBackTitle: 'Retour',
       }}>
       <SearchStack.Screen
         options={{
-          title: 'Recherche'
+          headerShown: false,
         }}
         name="Search"
         component={SearchScreen}
       />
       <SearchStack.Screen
         options={{
-          title: '',
-          headerBackTitle: 'Retour'
+          title: ''
         }}
         name="PodcastDetails"
-        component={PodcastStackNavigator}
+        component={PodcastDetailsScreen}
+      />
+      <SearchStack.Screen
+        options={{
+          title: ''
+        }}
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
       />
     </SearchStack.Navigator>
   )

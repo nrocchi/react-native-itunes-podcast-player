@@ -13,7 +13,7 @@ const SearchTile: React.FC<Props> = (props: { item: SearchQuery_search }) => {
 
   const navigation = useNavigation();
 
-  return <TouchableOpacity onPress={() => navigation.navigate('PodcastDetails', {screen: 'PodcastDetails', params: {data: props.item}})}>
+  return <TouchableOpacity onPress={() => navigation.navigate('PodcastDetails', {data: props.item})}>
     <Box h={90} dir="row" align="center" px="sm" bg="black">
       <Box h={70} w={70} mr={10} radius={5} bg="primary">
         {props.item.thumbnail && <Image source={{uri: props.item.thumbnail}} style={s.img}/>}
