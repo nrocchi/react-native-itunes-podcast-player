@@ -5,7 +5,7 @@ const SearchEmpty = () => {
   return (
     <Box f={1} center>
       <Text color="grey">
-        Veuillez rechercher un podcast...
+        Veuillez rechercher un podcast !
       </Text>
     </Box>
   )

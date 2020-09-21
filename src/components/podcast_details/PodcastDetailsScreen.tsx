@@ -11,6 +11,7 @@ import feedQuery from "../../graphql/query/feedQuery";
 import {FeedQuery, FeedQueryVariables} from "../../types/graphql";
 import {getMonth, getWeekDay, humanDuration} from "../../lib/dateTimeHelpers";
 import {usePlayerContext} from "../../context/PlayerContext";
+import HTMLReader from "../utils/HTMLReader";
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 
@@ -30,45 +31,53 @@ const PodcastDetailsScreen = () => {
       <FlatList
         ListHeaderComponent={
           <>
-            <Box dir="row" px="sm" mt="sm" mb="md">
+            <Box dir="row" px="sm" mt="sm" mb="md" center>
               {podcastData.thumbnail && (
+
                 <Box mr="sm">
                   <Image source={{uri: podcastData.thumbnail}} style={s.thumbnail} />
                 </Box>
               )}
               <Box f={1}>
-                <Text color="white" size="lg" bold>{podcastData.podcastName}</Text>
-                <Text color="grey" size="xs">{podcastData.artist}</Text>
+                <Text color="white" size="xl" bold>{podcastData.podcastName}</Text>
+                <Text color="grey" size="sm">{podcastData.artist}</Text>
                 <Text color="primary" size="xs" >Abonné</Text>
               </Box>
             </Box>
             <Box px="sm" mb="lg" dir="row" align="center">
               <Box mr="sm">
-                <TouchableOpacity onPress={() => {
-                  const elt = data?.feed[0];
-
-                  if (!elt) {
-                    return
-                  }
-
-                  playerContext.play({
-                    id: elt.linkUrl,
-                    title: elt.title,
-                    artwork: elt.image ?? podcastData.thumbnail,
-                    url: elt.linkUrl,
-                    artist: podcastData.artist
-                  })
-                }}>
-                  <FontAwesome5 name={"play"} size={30} color={theme.color.primary} />
-                </TouchableOpacity>
+                  {/*<FontAwesome5 name={"play"} size={30} color={theme.color.primary} />*/}
+                  {playerContext.isPlaying && (playerContext.currentTrack?.id === data?.feed[0].linkUrl) ? (
+                      <TouchableOpacity onPress={() => {
+                        playerContext.pause()
+                      }}>
+                          <FontAwesome5 name={'pause'} color={theme.color.primary} size={theme.text.size.lg} />
+                      </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPress={() => {
+                      const elt = data?.feed[0];
+                      if (!elt) {
+                        return
+                      }
+                      playerContext.play({
+                        id: elt.linkUrl,
+                        title: elt.title,
+                        artwork: elt.image ?? podcastData.thumbnail,
+                        url: elt.linkUrl,
+                        artist: podcastData.artist
+                      })
+                    }}>
+                      <FontAwesome5 name={'play'} color={theme.color.primary} size={theme.text.size.lg} />
+                    </TouchableOpacity>
+                  )}
               </Box>
              <Box f={1}>
                <Text color="primary" bold>Lancer le dernier épisode</Text>
                <Text color="white" size="sm">{data?.feed[0].title}</Text>
              </Box>
             </Box>
-            <Box px="sm" mb="md">
-              <Text size="lg" color="white" bold>Tous les épisodes</Text>
+            <Box px="sm" mb="sm">
+              <Text size="xl" color="white" bold>Tous les épisodes</Text>
             </Box>
             {loading && (
               <Box h={300} center>
@@ -93,7 +102,7 @@ const PodcastDetailsScreen = () => {
                 {item.title}
               </Text>
               <Text size="xs" color="grey" numberOfLines={2}>
-                {item.description}
+                {item.summary}
               </Text>
               <Text size="sm" color="primary">
                 {humanDuration(item.duration)}

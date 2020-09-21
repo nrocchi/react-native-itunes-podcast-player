@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {Box, UtilityThemeProvider} from 'react-native-design-utility';
 import { ApolloProvider } from '@apollo/react-hooks';
 import TrackPlayer from 'react-native-track-player';
+import SplashScreen from 'react-native-splash-screen';
 
 
 import {theme} from './src/constants/theme';
@@ -14,6 +15,10 @@ import {PlayerContextProvider} from "./src/context/PlayerContext";
 
 const App = () => {
   const [isReady, setIsReady] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   React.useEffect(() => {
     TrackPlayer.setupPlayer().then(() => {

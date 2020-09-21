@@ -121,12 +121,16 @@ const MainTabNavigator = () => {
         activeBackgroundColor: theme.color.blackLight,
         inactiveBackgroundColor: theme.color.blackLight,
         activeTintColor: theme.color.primary,
-        inactiveTintColor: theme.color.white
+        inactiveTintColor: theme.color.white,
+        tabStyle: {
+          paddingTop: 5,
+          paddingBottom: 5
+        },
       }}>
       <MainTab.Screen
         options={{
           title: 'En écoute',
-          tabBarIcon: (props) => <FontAwesome5 name={'headphones'} color={props.color} size={theme.text.size.md} />
+          tabBarIcon: (props) => <FontAwesome5 name={'headphones'} color={props.color} size={theme.text.size.lg} />
 
         }}
         name="ListenNow"
@@ -135,7 +139,7 @@ const MainTabNavigator = () => {
       <MainTab.Screen
         options={{
           title: 'Recherche',
-          tabBarIcon: (props) => <FontAwesome5 name={'search'} color={props.color} size={theme.text.size.md} />
+          tabBarIcon: (props) => <FontAwesome5 name={'search'} color={props.color} size={theme.text.size.lg} />
         }}
         name="Search"
         component={SearchStackNavigator}
@@ -143,7 +147,7 @@ const MainTabNavigator = () => {
       <MainTab.Screen
         options={{
           title: 'Bibliothèque',
-          tabBarIcon: (props) => <FontAwesome5 name={'archive'} color={props.color} size={theme.text.size.md} />
+          tabBarIcon: (props) => <FontAwesome5 name={'archive'} color={props.color} size={theme.text.size.lg} />
 
         }}
         name="Library"
