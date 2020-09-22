@@ -1,26 +1,26 @@
 export enum WeekDayEnum {
-  Monday = 'Lundi',
-  Tuesday = 'Mardi',
-  Wednesday = 'Mercredi',
-  Thursday = 'Jeudi',
-  Friday = 'Vendredi',
-  Saturday = 'Samedi',
-  Sunday = 'Dimanche',
+  Monday = 'Lun',
+  Tuesday = 'Mar',
+  Wednesday = 'Mer',
+  Thursday = 'Jeu',
+  Friday = 'Ven',
+  Saturday = 'Sam',
+  Sunday = 'Dim',
 }
 
 export enum MonthEnum {
-  January = 'Janvier',
-  February = 'Février',
-  March = 'Mars',
-  April = 'Avril',
-  May = 'Mai',
-  June = 'Juin',
-  July = 'Juillet',
-  August = 'Août',
-  September = 'Septembre',
-  October = 'Octobre',
-  November = 'Novembre',
-  December = 'Décembre',
+  January = 'JANV.',
+  February = 'FEVR.',
+  March = 'MARS',
+  April = 'AVR.',
+  May = 'MAI',
+  June = 'JUIN',
+  July = 'JUIL',
+  August = 'AOUT',
+  September = 'SEPT.',
+  October = 'OCT.',
+  November = 'NOV.',
+  December = 'DEC.',
 }
 
 export const getWeekDay = (date : Date): WeekDayEnum => {
@@ -77,22 +77,34 @@ export const humanDuration = (duration: string): string => {
   const durationSplit = duration.split(':');
   const [h, m] = durationSplit;
 
-  if (durationSplit.length === 2) {
-    const [m] = durationSplit;
-    return `${Number(m)}min`;
+  // console.log('*******************************************************');
+  // console.log('h', h);
+  // console.log('m', m);
+  // console.log('durationSplit', durationSplit);
+  // console.log('durationSplit length', durationSplit.length);
+  // console.log('durationSplit str', durationSplit.toString());
+
+  if(durationSplit.length === 1 && h !== '') {
+    const m = durationSplit.toString().substring(0, 2);
+    return `${m} MIN`;
   }
 
-  if (m === undefined || m === '' || h === undefined || h === '') {
+  if (durationSplit.length === 2) {
+    const [m] = durationSplit;
+    return `${m} MIN`;
+  }
+
+  if (m === undefined || m === '' && h === undefined || h === '') {
     return ``;
   }
 
   if (h === '00' || h === undefined || h === '') {
-    return `${Number(m)}min`;
+    return `${Number(m)} MIN`;
   }
 
-  if (m === '00' || m === undefined || m === '') {
-    return `${Number(h)}h`;
+  if (m === undefined || m === '') {
+    return `${Number(h)} H`;
   }
 
-  return `${Number(h)}h ${Number(m)}min`;
+  return `${Number(h)} H ${m} MIN`;
 };

@@ -2,7 +2,7 @@ const color = {
   primary: '#ff66cc',
 
   black: '#121212',
-  blackLight: '#212121',
+  blackLight: '#303030',
 
   greyDarkest: '#242424',
   greyDarker: '#616161',
@@ -56,7 +56,7 @@ export const theme = {
       md: 18,
       lg: 20,
       xl: 24,
-      xxl: 32,
+      xxl: 40,
     },
     weight: {
       light: '200',
@@ -123,15 +123,15 @@ export const theme = {
   borders: [
     {
       borderWidth: 1,
-      borderColor: color.black,
+      borderColor: color.primary,
     },
     {
       borderWidth: 2,
-      borderColor: color.black,
+      borderColor: color.primary,
     },
     {
       borderWidth: 5,
-      borderColor: color.black,
+      borderColor: color.primary,
     },
   ],
   button: {

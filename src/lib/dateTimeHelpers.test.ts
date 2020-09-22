@@ -38,12 +38,14 @@ describe('dateTimeHelpers', () => {
 
   describe('#humanDuration()', () => {
     it('should return the human readable duration', () => {
-      expect(humanDuration('03:13:00')).toBe('3h 13min');
-      expect(humanDuration('11:54:00')).toBe('11h 54min');
-      expect(humanDuration('10:01:00')).toBe('10h 1min');
-      expect(humanDuration('10:00:00')).toBe('10h');
-      expect(humanDuration('00:55:00')).toBe('55min');
-      expect(humanDuration('16:18')).toBe('16min');
+      expect(humanDuration('03:13:00')).toBe('3 H 13 MIN');
+      expect(humanDuration('11:54:00')).toBe('11 H 54 MIN');
+      expect(humanDuration('10:01:00')).toBe('10 H 01 MIN');
+      expect(humanDuration('10:00:00')).toBe('10 H 00 MIN');
+      expect(humanDuration('00:55:00')).toBe('55 MIN');
+      expect(humanDuration('00:07:00')).toBe('7 MIN');
+      expect(humanDuration('17:18')).toBe('17 MIN');
+      expect(humanDuration('1617')).toBe('16 MIN');
       expect(humanDuration('')).toBe('');
     });
   });

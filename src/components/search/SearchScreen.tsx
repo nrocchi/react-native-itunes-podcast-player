@@ -28,13 +28,13 @@ const SearchScreen = () => {
     <Box f={1} bg="black">
       <Text color="white" mt="xl" size="xxl" center bold>Recherche</Text>
       <Box h={50} w="100%" px="sm" my="sm">
-        <Box dir="row" align="center" h={40} bg="greyLightest" radius={5} px="sm">
+        <Box dir="row" align="center" h={50} bg="greyLightest" radius={5} px="sm">
           <Box mr="xs">
             <FontAwesome5 name={"search"} size={theme.text.size.md} color={theme.color.grey} />
           </Box>
           <TextInput
             style={s.input}
-            placeholder="Artistes, titres ou podcasts"
+            placeholder="Artistes, podcasts ou épisodes"
             selectionColor={theme.color.primary}
             onChangeText={setTerm}
             autoCorrect={false}
@@ -68,7 +68,7 @@ const SearchScreen = () => {
 const s = StyleSheet.create({
   input: {
     flex: 1,
-    fontSize: theme.text.size.sm
+    fontSize: theme.text.size.md
   },
   listContentContainer: {
     // paddingBottom: 90

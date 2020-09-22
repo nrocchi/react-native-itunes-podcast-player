@@ -1,9 +1,9 @@
 import React from 'react';
-import { createBottomTabNavigator, BottomTabBar } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import {BottomTabBar, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import { theme } from '../constants/theme';
+import {theme} from '../constants/theme';
 import ListenNowScreen from '../components/listen_now/ListenNowScreen';
 import LibraryScreen from '../components/library/LibraryScreen';
 import SearchScreen from '../components/search/SearchScreen';
