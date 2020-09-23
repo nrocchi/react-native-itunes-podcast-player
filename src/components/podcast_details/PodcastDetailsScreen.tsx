@@ -11,6 +11,8 @@ import feedQuery from "../../graphql/query/feedQuery";
 import {FeedQuery, FeedQueryVariables} from "../../types/graphql";
 import {getMonth, humanDuration} from "../../lib/dateTimeHelpers";
 import {usePlayerContext} from "../../context/PlayerContext";
+import {DBContext} from "../../context/DBContext";
+import {PodcastModel} from "../../models/PodcastModel";
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 
@@ -18,6 +20,7 @@ const PodcastDetailsScreen = () => {
   const playerContext = usePlayerContext();
   const navigation = useNavigation();
   const {data: podcastData} = useRoute<NavigationParams>().params ?? {};
+  const dbContext = React.useContext(DBContext);
 
   const {data, loading} = useQuery<FeedQuery, FeedQueryVariables>(feedQuery, {
     variables: {
@@ -47,9 +50,19 @@ const PodcastDetailsScreen = () => {
                 <Text color="white" size="xl" bold>{podcastData.podcastName}</Text>
                 <Text color="grey" size="sm" mb="xs">{podcastData.artist}</Text>
                 <Box dir="row" align="center">
-                  <Box radius="sm" bg={theme.color.primary} px="xs" py={5} center>
-                    <Text color="white" bold size="xs" uppercase>S'abonner</Text>
-                  </Box>
+
+                  <TouchableOpacity onPress={() => dbContext.subToPodcast(new PodcastModel({
+                      episodesCount: podcastData.episodesCount,
+                      thumbnail: podcastData.thumbnail,
+                      feedUrl: podcastData.feedUrl,
+                      name: podcastData.podcastName,
+                      artist: podcastData.artist
+                    }))}>
+                    <Box radius="sm" bg={theme.color.primary} px="xs" py={5} center>
+                      <Text color="white" bold size="xs" uppercase>S'abonner</Text>
+                    </Box>
+                  </TouchableOpacity>
+
                 </Box>
               </Box>
             </Box>
