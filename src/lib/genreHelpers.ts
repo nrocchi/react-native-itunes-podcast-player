@@ -3,13 +3,13 @@ export const splitGenreString = (genres: string): RegExpMatchArray | null => {
   // Music PodcastsTechnology
   // Music & PodcastsTechnology
 
-  const arrayGenres = genres.match(/[A-Z]+[^A-Z]*|[^A-Z]+/g);
-  const validGenres: string[] | null = [];
+  const arrayGenres = genres.match(/[A-Z]+[^A-Z]*|[^A-Z]+/g)
+  const validGenres: string[] | null = []
 
-  arrayGenres?.forEach(function(item){
-    let validITem: string = item.split('&').join('').trim();
-    validGenres.push(validITem);
-  });
+  arrayGenres?.forEach(function (item) {
+    const validITem: string = item.split('&').join('').trim()
+    validGenres.push(validITem)
+  })
 
-  return validGenres;
-};
+  return validGenres
+}

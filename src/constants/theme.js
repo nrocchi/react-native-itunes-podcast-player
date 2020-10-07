@@ -45,7 +45,7 @@ const color = {
   greenLight: '#66bb6a',
   greenLighter: '#81c784',
   greenLightest: '#a5d6a7',
-};
+}
 
 export const theme = {
   text: {
@@ -139,4 +139,4 @@ export const theme = {
       opacity: 0.5,
     },
   },
-};
+}

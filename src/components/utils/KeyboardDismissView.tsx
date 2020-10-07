@@ -1,8 +1,8 @@
 import React from 'react'
-import { ScrollView, TouchableOpacity, Keyboard, StyleSheet } from 'react-native'
+import {ScrollView, TouchableOpacity, Keyboard, StyleSheet} from 'react-native'
 
 interface Props {
-  withScrollView?: boolean;
+  withScrollView?: boolean
 }
 
 const KeyboardDismissView: React.FC<Props> = (props) => {
@@ -24,12 +24,12 @@ const KeyboardDismissView: React.FC<Props> = (props) => {
       {props.children}
     </TouchableOpacity>
   )
-};
+}
 
 const s = StyleSheet.create({
   container: {
     flex: 1,
-  }
-});
+  },
+})
 
 export default KeyboardDismissView

@@ -1,23 +1,22 @@
-import React from 'react';
+import React from 'react'
 import RNTrackPlayer, {
   State as TrackPlayerState,
   STATE_PAUSED,
   STATE_PLAYING,
   STATE_STOPPED,
-  Track
-} from 'react-native-track-player';
-import {val} from "react-native-reanimated/lib/typescript/val";
+  Track,
+} from 'react-native-track-player'
 
 interface PlayerContextType {
-  isPlaying: boolean;
-  isPaused: boolean;
-  isStopped: boolean;
-  isEmpty: boolean;
-  currentTrack: Track | null;
-  play: (track?: Track) => void;
-  pause: () => void;
-  seekToForward: (amount?: number) => void;
-  seekToBackward: (amount?: number) => void;
+  isPlaying: boolean
+  isPaused: boolean
+  isStopped: boolean
+  isEmpty: boolean
+  currentTrack: Track | null
+  play: (track?: Track) => void
+  pause: () => void
+  seekTo: (amount?: number) => void
+  goTo: (amount: number) => void
 }
 
 export const PlayerContext = React.createContext<PlayerContextType>({
@@ -28,56 +27,59 @@ export const PlayerContext = React.createContext<PlayerContextType>({
   currentTrack: null,
   play: () => null,
   pause: () => null,
-  seekToForward: () => null,
-  seekToBackward: () => null,
-});
+  seekTo: () => null,
+  goTo: () => null,
+})
 
 export const PlayerContextProvider: React.FC = (props) => {
-  const [playerState, setPlayerState] = React.useState<null | TrackPlayerState>(null);
+  const [playerState, setPlayerState] = React.useState<null | TrackPlayerState>(
+    null,
+  )
 
-  const [currentTrack, setCurrentTrack] = React.useState<null | Track>(null);
+  const [currentTrack, setCurrentTrack] = React.useState<null | Track>(null)
 
   React.useEffect(() => {
     const listener = RNTrackPlayer.addEventListener(
       'playback-state',
       ({state}: {state: TrackPlayerState}) => {
-        setPlayerState(state);
-      }
-    );
+        setPlayerState(state)
+      },
+    )
 
-    return () => {listener.remove();};
-  }, []);
+    return () => {
+      listener.remove()
+    }
+  }, [])
 
   const play = async (track?: Track) => {
     if (!track) {
       if (currentTrack) {
-        await RNTrackPlayer.play();
+        await RNTrackPlayer.play()
       }
-      return;
+      return
     }
 
     if (currentTrack && track.id !== currentTrack.id) {
-      await RNTrackPlayer.reset();
+      await RNTrackPlayer.reset()
     }
 
-    await RNTrackPlayer.add([track]);
-    setCurrentTrack(track);
-    await RNTrackPlayer.play();
-  };
+    await RNTrackPlayer.add([track])
+    setCurrentTrack(track)
+    await RNTrackPlayer.play()
+  }
 
   const pause = async () => {
-    await RNTrackPlayer.pause();
-  };
+    await RNTrackPlayer.pause()
+  }
 
-  const seekToForward = async (amount: number = 30) => {
-    const position = await RNTrackPlayer.getPosition();
-    await RNTrackPlayer.seekTo(position + amount);
-  };
+  const seekTo = async (amount: number = 30) => {
+    const position = await RNTrackPlayer.getPosition()
+    await RNTrackPlayer.seekTo(position + amount)
+  }
 
-  const seekToBackward = async (amount: number = 30) => {
-    const position = await RNTrackPlayer.getPosition();
-    await RNTrackPlayer.seekTo(position - amount);
-  };
+  const goTo = async (amount: number) => {
+    await RNTrackPlayer.seekTo(amount)
+  }
 
   const value: PlayerContextType = {
     isPlaying: playerState === STATE_PLAYING,
@@ -87,11 +89,15 @@ export const PlayerContextProvider: React.FC = (props) => {
     currentTrack,
     play,
     pause,
-    seekToForward,
-    seekToBackward
-  };
+    seekTo,
+    goTo,
+  }
 
-  return <PlayerContext.Provider value={value}>{props.children}</PlayerContext.Provider>;
-};
+  return (
+    <PlayerContext.Provider value={value}>
+      {props.children}
+    </PlayerContext.Provider>
+  )
+}
 
-export const usePlayerContext = () => React.useContext(PlayerContext);
+export const usePlayerContext = () => React.useContext(PlayerContext)

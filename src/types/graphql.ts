@@ -8,23 +8,23 @@
 // ====================================================
 
 export interface FeedQuery_feed {
-  __typename: "FeedItem";
-  description: string;
-  duration: string;
-  image: string | null;
-  linkUrl: string;
-  summary: string;
-  pubDate: string;
-  text: string;
-  title: string;
+  __typename: 'FeedItem'
+  description: string
+  duration: string
+  image: string | null
+  linkUrl: string
+  summary: string
+  pubDate: string
+  text: string
+  title: string
 }
 
 export interface FeedQuery {
-  feed: FeedQuery_feed[];
+  feed: FeedQuery_feed[]
 }
 
 export interface FeedQueryVariables {
-  feedUrl: string;
+  feedUrl: string
 }
 
 /* tslint:disable */
@@ -37,21 +37,22 @@ export interface FeedQueryVariables {
 // ====================================================
 
 export interface SearchQuery_search {
-  __typename: "Podcast";
-  artist: string;
-  episodesCount: number;
-  feedUrl: string;
-  podcastName: string;
-  thumbnail: string;
-  genres: string[];
+  name: string
+  __typename: 'Podcast'
+  artist: string
+  episodesCount: number
+  feedUrl: string
+  podcastName: string
+  thumbnail: string
+  genres: string[]
 }
 
 export interface SearchQuery {
-  search: SearchQuery_search[];
+  search: SearchQuery_search[]
 }
 
 export interface SearchQueryVariables {
-  term: string;
+  term: string
 }
 
 /* tslint:disable */

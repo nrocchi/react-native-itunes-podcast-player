@@ -1,6 +1,6 @@
-import {gql} from 'apollo-boost';
+import {gql} from 'apollo-boost'
 
-const searchQuery = gql`    
+const searchQuery = gql`
   query SearchQuery($term: String!) {
     search(term: $term) {
       artist
@@ -11,6 +11,6 @@ const searchQuery = gql`
       genres
     }
   }
-`;
+`
 
-export default searchQuery;
+export default searchQuery
