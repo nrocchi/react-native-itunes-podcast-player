@@ -52,6 +52,8 @@ describe('dateTimeHelpers', () => {
       expect(humanDuration('00:07:00')).toBe('7 MIN')
       expect(humanDuration('17:18')).toBe('17 MIN')
       expect(humanDuration('1617')).toBe('16 MIN')
+      expect(humanDuration('01:00:00')).toBe('60 MIN')
+      expect(humanDuration('1:00:00')).toBe('60 MIN')
       expect(humanDuration('')).toBe('')
     })
   })

@@ -5,16 +5,44 @@ import {Image, StyleSheet, TouchableOpacity} from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import {useNavigation} from '@react-navigation/native'
 
+import {connect} from 'react-redux'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import {theme} from '../../constants/theme'
 import {usePlayerContext} from '../../context/PlayerContext'
 import ProgressSlider from './ProgressSlider'
 import {makeHitSlop} from '../../constants/metrics'
+import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 
-const PlayerScreen = () => {
+const PlayerScreen = (props: {
+  favorites?: any
+  dispatch: (arg0: {type: string; value: any}) => void
+}) => {
   const playerContext = usePlayerContext()
   const navigation = useNavigation()
 
   const track = playerContext.currentTrack
+
+  function _toggleFavorite() {
+    const episodeWithPodcastInfo = {
+      title: track?.title,
+      description: track?.description,
+      image: track?.image,
+      linkUrl: track?.url,
+      summary: track?.summary,
+      text: track?.text,
+      duration: track?.duration,
+      pubDate: track?.date,
+      thumbnail: track?.artwork,
+      podcastName: track?.artist,
+    }
+
+    const action = {
+      type: 'TOGGLE_FAVORITE',
+      value: episodeWithPodcastInfo,
+    }
+
+    props.dispatch(action)
+  }
 
   if (!track) {
     return null
@@ -59,12 +87,77 @@ const PlayerScreen = () => {
             <Image source={{uri: track?.artwork}} style={s.img} />
           </Box>
           <Box center mb="md">
-            <Text color="white" size="md" center bold mb="sm">
+            <Text color="white" size="xl" center bold mb="sm">
               {track?.title}
             </Text>
             <Text color="grey" size="md" center bold mb="sm">
               {track?.artist}
             </Text>
+
+            {props.favorites.findIndex(
+              (item: {linkUrl: string}) => item.linkUrl === track?.url,
+            ) !== -1 ? (
+              // The episode is in favorite redux state
+              <TouchableOpacity
+                onPress={() => _toggleFavorite()}
+                hitSlop={makeHitSlop(20)}>
+                <Box
+                  dir="row"
+                  radius="sm"
+                  bg={theme.color.white}
+                  px="xs"
+                  py={5}
+                  center>
+                  <Icon
+                    name="check"
+                    size={theme.text.size.lg}
+                    color={theme.color.primary}
+                  />
+                  <Text color="primary" bold size="xs" ml="xs">
+                    Ajouté aux favoris
+                  </Text>
+                </Box>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => _toggleFavorite()}
+                hitSlop={makeHitSlop(20)}>
+                <Box
+                  dir="row"
+                  radius="sm"
+                  bg={theme.color.primary}
+                  px="xs"
+                  py={5}
+                  center>
+                  <Icon
+                    name="heart"
+                    size={theme.text.size.lg}
+                    color={theme.color.white}
+                  />
+                  <Text color="white" bold size="xs" ml="xs">
+                    Ajouter aux favoris
+                  </Text>
+                </Box>
+              </TouchableOpacity>
+            )}
+          </Box>
+
+          <Box mb="sm">
+            <Box dir="row" align="center" justify="center">
+              <Box f={1} align="start">
+                <Text size="xs" color="grey">
+                  {track?.date && new Date(track?.date).getDate()}{' '}
+                  {track?.date && getMonth(new Date(track?.date))}{' '}
+                  {track?.date && new Date(track?.date).getFullYear()}
+                </Text>
+              </Box>
+
+              <Box f={1} align="end">
+                <Text size="xs" color="grey">
+                  {track?.duration && humanDuration(track?.duration.toString())}
+                </Text>
+              </Box>
+            </Box>
           </Box>
 
           <Box bg="blackLight" px="sm" py="sm" radius={10}>
@@ -74,7 +167,9 @@ const PlayerScreen = () => {
 
             <Box dir="row" align="center" justify="center">
               <Box>
-                <TouchableOpacity onPress={() => playerContext.seekTo(-30)}>
+                <TouchableOpacity
+                  onPress={() => playerContext.seekTo(-30)}
+                  hitSlop={makeHitSlop(20)}>
                   <FontAwesome5
                     name={'backward'}
                     color={theme.color.primary}
@@ -82,27 +177,33 @@ const PlayerScreen = () => {
                   />
                 </TouchableOpacity>
               </Box>
-              <Box mx="xl">
+              <Box mx="lg">
                 {playerContext.isPaused ? (
-                  <TouchableOpacity onPress={() => playerContext.play()}>
-                    <FontAwesome5
-                      name={'play'}
+                  <TouchableOpacity
+                    onPress={() => playerContext.play()}
+                    hitSlop={makeHitSlop(20)}>
+                    <Icon
+                      name="play-circle"
+                      size={70}
                       color={theme.color.primary}
-                      size={theme.text.size.xxl}
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity onPress={playerContext.pause}>
-                    <FontAwesome5
-                      name={'pause'}
+                  <TouchableOpacity
+                    onPress={playerContext.pause}
+                    hitSlop={makeHitSlop(20)}>
+                    <Icon
+                      name="pause-circle"
+                      size={70}
                       color={theme.color.primary}
-                      size={theme.text.size.xxl}
                     />
                   </TouchableOpacity>
                 )}
               </Box>
               <Box>
-                <TouchableOpacity onPress={() => playerContext.seekTo()}>
+                <TouchableOpacity
+                  onPress={() => playerContext.seekTo()}
+                  hitSlop={makeHitSlop(20)}>
                   <FontAwesome5
                     name={'forward'}
                     color={theme.color.primary}
@@ -136,4 +237,18 @@ const s = StyleSheet.create({
   },
 })
 
-export default PlayerScreen
+const mapStateToProps = (state: any) => {
+  return {
+    favorites: state.favorites,
+  }
+}
+
+const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
+  return {
+    dispatch: (action: any) => {
+      dispatch(action)
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerScreen)

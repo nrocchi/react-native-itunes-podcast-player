@@ -3,20 +3,51 @@ import {Box, Text} from 'react-native-design-utility'
 import {useNavigation, useRoute} from '@react-navigation/native'
 import {Image, ScrollView, TouchableOpacity} from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import {connect} from 'react-redux'
 
 import {theme} from '../../constants/theme'
 import {FeedQuery_feed, SearchQuery_search} from '../../types/graphql'
 import {getMonth, getWeekDay, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import HTMLReader from '../utils/HTMLReader'
+import {makeHitSlop} from '../../constants/metrics'
 
-const EpisodeDetailsScreen = () => {
+const EpisodeDetailsScreen = (props: {
+  favorites?: any
+  dispatch: (arg0: {type: string; value: any}) => void
+}) => {
   const routeParams = (useRoute().params ?? {}) as {
     episode: FeedQuery_feed
     podcast: SearchQuery_search
+    podcastThumb: String
+    podcastName: String
   }
   const playerContext = usePlayerContext()
   const navigation = useNavigation()
+
+  function _toggleFavorite() {
+    const episodeWithPodcastInfo = {
+      title: routeParams.episode.title,
+      description: routeParams.episode.description,
+      image: routeParams.episode.image,
+      linkUrl: routeParams.episode.linkUrl,
+      summary: routeParams.episode.summary,
+      text: routeParams.episode.text,
+      duration: routeParams.episode.duration,
+      pubDate: routeParams.episode.pubDate,
+      thumbnail: routeParams.podcast.thumbnail,
+      podcastName: routeParams.podcast.artist,
+      date: new Date('now'),
+    }
+
+    const action = {
+      type: 'TOGGLE_FAVORITE',
+      value: episodeWithPodcastInfo,
+    }
+
+    props.dispatch(action)
+  }
 
   return (
     <Box f={1} center bg="black">
@@ -32,7 +63,9 @@ const EpisodeDetailsScreen = () => {
               <Image
                 source={{
                   uri:
-                    routeParams.episode.image ?? routeParams.podcast.thumbnail,
+                    (routeParams.episode.image ||
+                      (props.favorites && props.favorites.image)) ??
+                    (routeParams.podcast.thumbnail || routeParams.podcastThumb),
                 }}
                 style={{flex: 1}}
               />
@@ -40,11 +73,64 @@ const EpisodeDetailsScreen = () => {
           </Box>
 
           <Text color="white" mb="xs" size="xl" bold>
-            {routeParams.episode.title}
+            {routeParams.episode.title || props.favorites.title}
           </Text>
-          <Text color="grey" bold size="sm" mb="md">
-            {routeParams.podcast.artist}
+          <Text color="grey" bold size="sm" mb="sm">
+            {routeParams.podcast.artist || routeParams.podcastName}
           </Text>
+
+          {props.favorites.findIndex(
+            (item: {linkUrl: string}) =>
+              item.linkUrl === routeParams.episode.linkUrl ||
+              props.favorites.linkUrl,
+          ) !== -1 ? (
+            // The episode is in favorite redux state
+            <Box center mb="sm">
+              <TouchableOpacity
+                onPress={() => _toggleFavorite()}
+                hitSlop={makeHitSlop(20)}>
+                <Box
+                  dir="row"
+                  radius="sm"
+                  bg={theme.color.white}
+                  px="xs"
+                  py={5}
+                  center>
+                  <Icon
+                    name="check"
+                    size={theme.text.size.lg}
+                    color={theme.color.primary}
+                  />
+                  <Text color="primary" bold size="xs" ml="xs">
+                    Ajouté aux favoris
+                  </Text>
+                </Box>
+              </TouchableOpacity>
+            </Box>
+          ) : (
+            <Box center mb="sm">
+              <TouchableOpacity
+                onPress={() => _toggleFavorite()}
+                hitSlop={makeHitSlop(20)}>
+                <Box
+                  dir="row"
+                  radius="sm"
+                  bg={theme.color.primary}
+                  px="xs"
+                  py={5}
+                  center>
+                  <Icon
+                    name="heart"
+                    size={theme.text.size.lg}
+                    color={theme.color.white}
+                  />
+                  <Text color="white" bold size="xs" ml="xs">
+                    Ajouter aux favoris
+                  </Text>
+                </Box>
+              </TouchableOpacity>
+            </Box>
+          )}
 
           <Box f={1} mb="sm">
             <Box
@@ -56,41 +142,61 @@ const EpisodeDetailsScreen = () => {
               bg="blackLight">
               <Box mr="sm">
                 {playerContext.currentTrack?.id ===
-                routeParams.episode.linkUrl ? (
+                (routeParams.episode.linkUrl || props.favorites.linkUrl) ? (
                   playerContext.isPaused ? (
-                    <TouchableOpacity onPress={() => playerContext.play()}>
-                      <FontAwesome5
-                        name={'play'}
+                    <TouchableOpacity
+                      onPress={() => playerContext.play()}
+                      hitSlop={makeHitSlop(20)}>
+                      <Icon
+                        name="play-circle"
+                        size={theme.text.size.xxl}
                         color={theme.color.primary}
-                        size={theme.text.size.lg}
                       />
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity onPress={playerContext.pause}>
-                      <FontAwesome5
-                        name={'pause'}
+                    <TouchableOpacity
+                      onPress={playerContext.pause}
+                      hitSlop={makeHitSlop(20)}>
+                      <Icon
+                        name="pause-circle"
+                        size={theme.text.size.xxl}
                         color={theme.color.primary}
-                        size={theme.text.size.lg}
                       />
                     </TouchableOpacity>
                   )
                 ) : (
                   <TouchableOpacity
+                    hitSlop={makeHitSlop(20)}
                     onPress={() =>
                       playerContext.play({
-                        id: routeParams.episode.linkUrl,
-                        title: routeParams.episode.title,
+                        id:
+                          routeParams.episode.linkUrl ||
+                          props.favorites.linkUrl,
+                        title:
+                          routeParams.episode.title || props.favorites.title,
                         artwork:
-                          routeParams.episode.image ??
-                          routeParams.podcast.thumbnail,
-                        url: routeParams.episode.linkUrl,
-                        artist: routeParams.podcast.artist,
+                          routeParams.episode.image ||
+                          props.favorites.image ||
+                          routeParams.podcast.thumbnail ||
+                          props.favorites.thumbnail,
+                        url:
+                          routeParams.episode.linkUrl ||
+                          props.favorites.linkUrl,
+                        artist:
+                          routeParams.podcast.artist ||
+                          props.favorites.podcastName,
+                        date:
+                          routeParams.episode.pubDate ||
+                          props.favorites.pubDate,
+                        duration:
+                          routeParams.episode.duration ||
+                          props.favorites.duration,
                       })
                     }>
-                    <FontAwesome5
-                      name={'play'}
+                    <Icon
+                      name="play-circle"
+                      size={theme.text.size.xxl}
                       color={theme.color.primary}
-                      size={theme.text.size.lg}
                     />
                   </TouchableOpacity>
                 )}
@@ -98,12 +204,15 @@ const EpisodeDetailsScreen = () => {
               <Box>
                 <Text bold color="primary">
                   {playerContext.isPlaying &&
-                  playerContext.currentTrack?.id === routeParams.episode.linkUrl
+                  playerContext.currentTrack?.id ===
+                    (routeParams.episode.linkUrl || props.favorites.linkUrl)
                     ? 'Pause'
                     : 'Lecture'}
                 </Text>
                 <Text size="xs" color="white">
-                  {humanDuration(routeParams.episode.duration)}
+                  {humanDuration(
+                    routeParams.episode.duration || props.favorites.duration,
+                  )}
                 </Text>
               </Box>
             </Box>
@@ -117,18 +226,62 @@ const EpisodeDetailsScreen = () => {
             radius="xs"
             bg={theme.color.blackLight}>
             <Text size="xs" mb="xs" color="white">
-              {getWeekDay(new Date(routeParams.episode.pubDate))}{' '}
-              {new Date(routeParams.episode.pubDate).getDate()}{' '}
-              {getMonth(new Date(routeParams.episode.pubDate))}{' '}
-              {new Date(routeParams.episode.pubDate).getFullYear()}
+              {getWeekDay(
+                new Date(
+                  routeParams.episode.pubDate || props.favorites.pubDate,
+                ),
+              )}{' '}
+              {new Date(
+                routeParams.episode.pubDate || props.favorites.pubDate,
+              ).getDate()}{' '}
+              {getMonth(
+                new Date(
+                  routeParams.episode.pubDate || props.favorites.pubDate,
+                ),
+              )}{' '}
+              {new Date(
+                routeParams.episode.pubDate || props.favorites.pubDate,
+              ).getFullYear()}
             </Text>
-            <HTMLReader html={routeParams.episode.description} />
-            {/* <Text color="green" size="sm" style={{textAlign: "justify"}}>{routeParams.episode.description}</Text> */}
+            {routeParams.episode.description ||
+            props.favorites.description ||
+            routeParams.episode.summary ? (
+              <HTMLReader
+                html={
+                  (routeParams.episode.description ||
+                    props.favorites.description) ??
+                  routeParams.episode.summary
+                }
+              />
+            ) : (
+              <Box dir="row" align="center">
+                <Box mr="xs">
+                  <FontAwesome5
+                    name={'info-circle'}
+                    color={theme.color.grey}
+                    size={theme.text.size.md}
+                  />
+                </Box>
+                <Text color="grey" size="sm" center>
+                  Aucune description
+                </Text>
+              </Box>
+            )}
+            {/* <Text color="green" size="sm" style={{textAlign: 'justify'}}>
+              {(routeParams.episode.description ||
+                props.favorites.description ||
+                routeParams.episode.summary) &&
+                (routeParams.episode.description ||
+                  props.favorites.description ||
+                  routeParams.episode.summary)}
+            </Text> */}
           </Box>
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('PodcastDetails', {data: routeParams.podcast})
+              navigation.navigate('PodcastDetails', {
+                data: routeParams.podcast || props.favorites,
+              })
             }>
             <Box dir="row" align="center" justify="between" mb="xl">
               <Text color="grey">Voir tous les épisodes</Text>
@@ -145,4 +298,21 @@ const EpisodeDetailsScreen = () => {
   )
 }
 
-export default EpisodeDetailsScreen
+const mapStateToProps = (state: any) => {
+  return {
+    favorites: state.favorites,
+  }
+}
+
+const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
+  return {
+    dispatch: (action: any) => {
+      dispatch(action)
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EpisodeDetailsScreen)

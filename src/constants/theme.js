@@ -1,5 +1,11 @@
 const color = {
-  primary: '#ff66cc',
+  // rose: ff66cc,
+  // saumon: ff6684,
+  // purple: 9666ff,
+  // blue: 6699ff,
+  // cyan: 66d6ff
+
+  primary: '#7faaff',
 
   black: '#121212',
   blackLight: '#303030',
@@ -56,7 +62,7 @@ export const theme = {
       md: 18,
       lg: 20,
       xl: 24,
-      xxl: 40,
+      xxl: 35,
     },
     weight: {
       light: '200',

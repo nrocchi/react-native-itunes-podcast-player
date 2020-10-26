@@ -12,47 +12,49 @@ const LibraryScreen = () => {
   const navigation = useNavigation()
 
   return (
-    <Box f={1} bg="black">
-      <Text color="white" mt="sm" mb="sm" size="xxl" center bold>
+    <Box f={1} bg="black" p="sm">
+      <Text color="white" size="xxl" center bold>
         Abonnements
       </Text>
+      <Text color="primary" mb="xs" size="sm" right>
+        {dbContext.podcasts.length} podcast
+        {dbContext.podcasts.length > 1 ? 's' : ''}
+      </Text>
       <ScrollView>
-        <Box px="sm" mb="sm">
-          {dbContext.podcasts.map((podcast) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('PodcastDetails', {data: podcast})
-              }
-              key={podcast.feedUrl}>
-              <Box pr="xs" radius="xs" bg={theme.color.blackLight} mb="sm">
-                <Box dir="row" align="center">
-                  <Box h={70} w={70} mr="xs" radius={5} bg="primary">
-                    {podcast.thumbnail && (
-                      <Image source={{uri: podcast.thumbnail}} style={s.img} />
-                    )}
-                  </Box>
-                  <Box f={1}>
-                    <Text color="white" bold numberOfLines={1}>
-                      {podcast.name}
-                    </Text>
-                    <Text color="grey" size="xs" numberOfLines={1}>
-                      {podcast.artist}
-                    </Text>
-                    <Text color="primary" size="xs">
-                      {podcast.episodesCount} épisodes
-                    </Text>
-                  </Box>
-
-                  <FontAwesome5
-                    name={'times'}
-                    color={theme.color.grey}
-                    size={theme.text.size.xl}
-                  />
+        {dbContext.podcasts.map((podcast) => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('PodcastDetails', {data: podcast})
+            }
+            key={podcast.feedUrl}>
+            <Box pr="xs" radius="xs" bg={theme.color.blackLight} mb="sm">
+              <Box dir="row" align="center">
+                <Box h={70} w={70} mr="xs" radius={5} bg="primary">
+                  {podcast.thumbnail && (
+                    <Image source={{uri: podcast.thumbnail}} style={s.img} />
+                  )}
                 </Box>
+                <Box f={1}>
+                  <Text color="white" bold numberOfLines={2}>
+                    {podcast.name}
+                  </Text>
+                  <Text color="grey" size="xs" numberOfLines={1}>
+                    {podcast.artist}
+                  </Text>
+                  <Text color="primary" size="xs">
+                    {podcast.episodesCount} épisodes
+                  </Text>
+                </Box>
+
+                <FontAwesome5
+                  name={'times'}
+                  color={theme.color.grey}
+                  size={theme.text.size.xl}
+                />
               </Box>
-            </TouchableOpacity>
-          ))}
-        </Box>
+            </Box>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </Box>
   )

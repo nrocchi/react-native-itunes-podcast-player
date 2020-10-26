@@ -6,6 +6,7 @@ import {Image, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {usePlayerContext} from '../../context/PlayerContext'
 import {theme} from '../../constants/theme'
+import {makeHitSlop} from '../../constants/metrics'
 
 const MiniPlayer = () => {
   const playerContext = usePlayerContext()
@@ -41,7 +42,9 @@ const MiniPlayer = () => {
             </Text>
           </Box>
           <Box mr="sm">
-            <TouchableOpacity onPress={() => playerContext.seekTo(-30)}>
+            <TouchableOpacity
+              onPress={() => playerContext.seekTo(-30)}
+              hitSlop={makeHitSlop(20)}>
               <FontAwesome5
                 name={'backward'}
                 color={theme.color.primary}
@@ -51,25 +54,31 @@ const MiniPlayer = () => {
           </Box>
           <Box mr="sm">
             {playerContext.isPaused ? (
-              <TouchableOpacity onPress={() => playerContext.play()}>
+              <TouchableOpacity
+                onPress={() => playerContext.play()}
+                hitSlop={makeHitSlop(20)}>
                 <FontAwesome5
                   name={'play'}
                   color={theme.color.primary}
-                  size={theme.text.size.lg}
+                  size={theme.text.size.xl}
                 />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity onPress={playerContext.pause}>
+              <TouchableOpacity
+                onPress={playerContext.pause}
+                hitSlop={makeHitSlop(20)}>
                 <FontAwesome5
                   name={'pause'}
                   color={theme.color.primary}
-                  size={theme.text.size.lg}
+                  size={theme.text.size.xl}
                 />
               </TouchableOpacity>
             )}
           </Box>
           <Box>
-            <TouchableOpacity onPress={() => playerContext.seekTo()}>
+            <TouchableOpacity
+              onPress={() => playerContext.seekTo()}
+              hitSlop={makeHitSlop(20)}>
               <FontAwesome5
                 name={'forward'}
                 color={theme.color.primary}

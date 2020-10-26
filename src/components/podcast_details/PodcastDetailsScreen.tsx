@@ -9,8 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import {connect} from 'react-redux'
 
 import {useQuery} from '@apollo/react-hooks'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import {theme} from '../../constants/theme'
 import {SearchStackRouteParamsList} from '../../navigators/types'
 import feedQuery from '../../graphql/query/feedQuery'
@@ -24,10 +26,15 @@ import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import {DBContext} from '../../context/DBContext'
 import {PodcastModel} from '../../models/PodcastModel'
+import {makeHitSlop} from '../../constants/metrics'
+import HTMLReader from '../utils/HTMLReader'
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>
 
-const PodcastDetailsScreen = () => {
+const PodcastDetailsScreen = (props: {
+  favorites?: any
+  dispatch: (arg0: {type: string; value: any}) => void
+}) => {
   const playerContext = usePlayerContext()
   const navigation = useNavigation()
   const routeParams = (useRoute().params ?? {}) as {
@@ -85,6 +92,32 @@ const PodcastDetailsScreen = () => {
       })
   }
 
+  function _toggleFavorite(
+    favorite: FeedQuery_feed,
+    podcast_thumbnail: string,
+    podcast_artist: string,
+  ) {
+    const episodeWithPodcastInfo = {
+      title: favorite.title,
+      description: favorite.description,
+      image: favorite.image,
+      linkUrl: favorite.linkUrl,
+      summary: favorite.summary,
+      text: favorite.text,
+      duration: favorite.duration,
+      pubDate: favorite.pubDate,
+      thumbnail: podcast_thumbnail,
+      podcastName: podcast_artist,
+    }
+
+    const action = {
+      type: 'TOGGLE_FAVORITE',
+      value: episodeWithPodcastInfo,
+    }
+
+    props.dispatch(action)
+  }
+
   return (
     <Box f={1} bg="black">
       <FlatList
@@ -140,6 +173,24 @@ const PodcastDetailsScreen = () => {
               </Box>
             </Box>
             <Box f={1} px="sm" mb="sm">
+              <Box dir="row">
+                {genres.map((item, key) => (
+                  <Box
+                    key={key}
+                    radius="sm"
+                    bg={theme.color.blackLight}
+                    px="xs"
+                    py={3}
+                    mr="xs">
+                    <Text color="primary" bold size="xs">
+                      {item}
+                    </Text>
+                  </Box>
+                ))}
+              </Box>
+              {/* <Text color={theme.color.green} bold size="xs" mt="xs">{podcastData.genres}</Text> */}
+            </Box>
+            <Box f={1} px="sm" mb="sm">
               <Box
                 dir="row"
                 align="center"
@@ -148,27 +199,37 @@ const PodcastDetailsScreen = () => {
                 radius="xs"
                 bg={theme.color.blackLight}>
                 <Box mr="sm">
-                  {!loading &&
-                  playerContext.currentTrack?.id === data?.feed[0].linkUrl ? (
+                  {loading ? (
+                    <ActivityIndicator
+                      size={theme.text.size.lg}
+                      color={theme.color.primary}
+                    />
+                  ) : playerContext.currentTrack?.id ===
+                    data?.feed[0].linkUrl ? (
                     playerContext.isPaused ? (
-                      <TouchableOpacity onPress={() => playerContext.play()}>
-                        <FontAwesome5
-                          name={'play'}
+                      <TouchableOpacity
+                        onPress={() => playerContext.play()}
+                        hitSlop={makeHitSlop(20)}>
+                        <Icon
+                          name="play-circle"
+                          size={theme.text.size.xxl}
                           color={theme.color.primary}
-                          size={theme.text.size.lg}
                         />
                       </TouchableOpacity>
                     ) : (
-                      <TouchableOpacity onPress={playerContext.pause}>
-                        <FontAwesome5
-                          name={'pause'}
+                      <TouchableOpacity
+                        onPress={playerContext.pause}
+                        hitSlop={makeHitSlop(20)}>
+                        <Icon
+                          name="pause-circle"
+                          size={theme.text.size.xxl}
                           color={theme.color.primary}
-                          size={theme.text.size.lg}
                         />
                       </TouchableOpacity>
                     )
                   ) : (
                     <TouchableOpacity
+                      hitSlop={makeHitSlop(20)}
                       onPress={() => {
                         const elt = data?.feed[0]
                         if (!elt) {
@@ -180,12 +241,14 @@ const PodcastDetailsScreen = () => {
                           artwork: elt.image ?? podcastData.thumbnail,
                           url: elt.linkUrl,
                           artist: podcastData.artist,
+                          date: elt.pubDate,
+                          duration: elt.duration,
                         })
                       }}>
-                      <FontAwesome5
-                        name={'play'}
+                      <Icon
+                        name="play-circle"
+                        size={theme.text.size.xxl}
                         color={theme.color.primary}
-                        size={theme.text.size.lg}
                       />
                     </TouchableOpacity>
                   )}
@@ -200,24 +263,7 @@ const PodcastDetailsScreen = () => {
                 </Box>
               </Box>
             </Box>
-            <Box f={1} px="sm" mb="md">
-              <Box dir="row">
-                {genres.map((item, key) => (
-                  <Box
-                    key={key}
-                    radius="sm"
-                    bg={theme.color.primary}
-                    px="xs"
-                    py={3}
-                    mr="xs">
-                    <Text color="white" bold size="xs">
-                      {item}
-                    </Text>
-                  </Box>
-                ))}
-              </Box>
-              {/* <Text color={theme.color.green} bold size="xs" mt="xs">{podcastData.genres}</Text> */}
-            </Box>
+
             <Box px="sm">
               <Text size="md" color="white" bold>
                 Tous les épisodes
@@ -235,6 +281,7 @@ const PodcastDetailsScreen = () => {
             )}
           </>
         }
+        extraData={props.favorites}
         renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
@@ -245,14 +292,14 @@ const PodcastDetailsScreen = () => {
             }>
             <Box px="sm" mb="sm">
               <Box
-                px="sm"
+                px="xs"
                 pt="xs"
-                pb="sm"
+                pb="xs"
                 radius="xs"
                 bg={theme.color.blackLight}>
-                <Box dir="row" center mb="sm">
+                <Box dir="row" center mb="xs">
                   {(podcastData.thumbnail || item.image) && (
-                    <Box mr="sm">
+                    <Box mr="xs">
                       <Image
                         source={{uri: item.image ?? podcastData.thumbnail}}
                         style={s.thumbnail}
@@ -267,6 +314,47 @@ const PodcastDetailsScreen = () => {
                       {podcastData.artist}
                     </Text>
                   </Box>
+
+                  {props.favorites.findIndex(
+                    (fav: {linkUrl: string}) => fav.linkUrl === item.linkUrl,
+                  ) !== -1 ? (
+                    // The episode is in favorite redux state
+                    <Box ml="xs">
+                      <TouchableOpacity
+                        hitSlop={makeHitSlop(20)}
+                        onPress={() =>
+                          _toggleFavorite(
+                            item,
+                            podcastData.thumbnail,
+                            podcastData.artist,
+                          )
+                        }>
+                        <Icon
+                          name="heart"
+                          size={theme.text.size.lg}
+                          color={theme.color.primary}
+                        />
+                      </TouchableOpacity>
+                    </Box>
+                  ) : (
+                    <Box ml="xs">
+                      <TouchableOpacity
+                        hitSlop={makeHitSlop(20)}
+                        onPress={() =>
+                          _toggleFavorite(
+                            item,
+                            podcastData.thumbnail,
+                            podcastData.artist,
+                          )
+                        }>
+                        <Icon
+                          name="heart-o"
+                          size={theme.text.size.lg}
+                          color={theme.color.white}
+                        />
+                      </TouchableOpacity>
+                    </Box>
+                  )}
                 </Box>
                 <Box>
                   <Text size="xs" color="white" mb="xs">
@@ -274,35 +362,59 @@ const PodcastDetailsScreen = () => {
                     {getMonth(new Date(item.pubDate))}{' '}
                     {new Date(item.pubDate).getFullYear()}
                   </Text>
-                  <Text size="xs" color="grey" mb="sm" numberOfLines={5}>
-                    {item.summary ?? item.description}
-                  </Text>
+
+                  {item.description || item.summary ? (
+                    <Text size="xs" color="grey" mb="xs" numberOfLines={5}>
+                      {item.summary ?? item.description}
+                    </Text>
+                  ) : (
+                    <Box dir="row" align="center">
+                      <Box mr="xs">
+                        <FontAwesome5
+                          name={'info-circle'}
+                          color={theme.color.grey}
+                          size={theme.text.size.md}
+                        />
+                      </Box>
+                      <Text color="grey" size="sm" center>
+                        Aucune description
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
                 <Box f={1}>
                   <Box dir="row" align="center">
                     <Box mr="xs">
-                      {!loading &&
-                      playerContext.currentTrack?.id === item.linkUrl ? (
+                      {loading ? (
+                        <ActivityIndicator
+                          size={theme.text.size.lg}
+                          color={theme.color.primary}
+                        />
+                      ) : playerContext.currentTrack?.id === item.linkUrl ? (
                         playerContext.isPaused ? (
                           <TouchableOpacity
-                            onPress={() => playerContext.play()}>
-                            <FontAwesome5
-                              name={'play'}
+                            onPress={() => playerContext.play()}
+                            hitSlop={makeHitSlop(20)}>
+                            <Icon
+                              name="play-circle"
+                              size={theme.text.size.xl}
                               color={theme.color.primary}
-                              size={theme.text.size.lg}
                             />
                           </TouchableOpacity>
                         ) : (
-                          <TouchableOpacity onPress={playerContext.pause}>
-                            <FontAwesome5
-                              name={'pause'}
+                          <TouchableOpacity
+                            onPress={playerContext.pause}
+                            hitSlop={makeHitSlop(20)}>
+                            <Icon
+                              name="pause-circle"
+                              size={theme.text.size.xl}
                               color={theme.color.primary}
-                              size={theme.text.size.lg}
                             />
                           </TouchableOpacity>
                         )
                       ) : (
                         <TouchableOpacity
+                          hitSlop={makeHitSlop(20)}
                           onPress={() =>
                             playerContext.play({
                               id: item.linkUrl,
@@ -310,12 +422,14 @@ const PodcastDetailsScreen = () => {
                               artwork: item.image ?? podcastData.thumbnail,
                               url: item.linkUrl,
                               artist: podcastData.artist,
+                              date: item.pubDate,
+                              duration: item.duration,
                             })
                           }>
-                          <FontAwesome5
-                            name={'play'}
+                          <Icon
+                            name="play-circle"
+                            size={theme.text.size.xl}
                             color={theme.color.primary}
-                            size={theme.text.size.lg}
                           />
                         </TouchableOpacity>
                       )}
@@ -339,10 +453,27 @@ const PodcastDetailsScreen = () => {
 
 const s = StyleSheet.create({
   thumbnail: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
     borderRadius: 5,
   },
 })
 
-export default PodcastDetailsScreen
+const mapStateToProps = (state: any) => {
+  return {
+    favorites: state.favorites,
+  }
+}
+
+const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
+  return {
+    dispatch: (action: any) => {
+      dispatch(action)
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PodcastDetailsScreen)

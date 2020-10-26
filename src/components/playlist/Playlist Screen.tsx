@@ -1,17 +1,17 @@
 import React from 'react'
 import {Box, Text} from 'react-native-design-utility'
 
+import {useNavigation} from '@react-navigation/native'
 import {ScrollView} from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import {useNavigation} from '@react-navigation/native'
 import {theme} from '../../constants/theme'
 
-const ListenNowScreen = () => {
+const PlaylistScreen = () => {
   const navigation = useNavigation()
 
   return (
     <Box f={1} bg="black" px="sm">
-      <Text color="primary" mb="xs" size="sm" right>
+      <Text color="primary" my="xs" size="sm" right>
         10 épisodes
       </Text>
       <ScrollView>
@@ -379,4 +379,4 @@ const ListenNowScreen = () => {
   )
 }
 
-export default ListenNowScreen
+export default PlaylistScreen

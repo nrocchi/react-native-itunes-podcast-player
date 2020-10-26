@@ -94,6 +94,10 @@ export const humanDuration = (duration: string): string => {
     return `${m} MIN`
   }
 
+  if ((h === '01' || h === '1') && m === '00') {
+    return `60 MIN`
+  }
+
   if (m === undefined || (m === '' && h === undefined) || h === '') {
     return ``
   }

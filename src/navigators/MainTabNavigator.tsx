@@ -5,39 +5,24 @@ import {
 } from '@react-navigation/bottom-tabs'
 import {createStackNavigator} from '@react-navigation/stack'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 import {theme} from '../constants/theme'
-import ListenNowScreen from '../components/listen_now/ListenNowScreen'
 import LibraryScreen from '../components/library/LibraryScreen'
 import SearchScreen from '../components/search/SearchScreen'
 import PodcastDetailsScreen from '../components/podcast_details/PodcastDetailsScreen'
 import MiniPlayer from '../components/mini_player/MiniPlayer'
 import EpisodeDetailsScreen from '../components/episode_details/EpisodeDetailsScreen'
+// eslint-disable-next-line import/no-named-as-default-member
 import FavoritesScreen from '../components/favorites/FavoritesScreen'
+import HomeScreen from '../components/home/HomeScreen'
 
 const MainTab = createBottomTabNavigator()
 
-const ListenNowStack = createStackNavigator()
 const LibraryStack = createStackNavigator()
 const SearchStack = createStackNavigator()
 const FavoritesStack = createStackNavigator()
-
-const ListenNowStackNavigator = () => {
-  return (
-    <ListenNowStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <ListenNowStack.Screen
-        options={{
-          title: 'En écoute',
-        }}
-        name="ListenNow"
-        component={ListenNowScreen}
-      />
-    </ListenNowStack.Navigator>
-  )
-}
+const HomeStack = createStackNavigator()
 
 const LibraryStackNavigator = () => {
   return (
@@ -105,15 +90,16 @@ const FavoritesStackNavigator = () => {
         options={{
           title: '',
         }}
-        name="PodcastDetails"
-        component={PodcastDetailsScreen}
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
       />
+
       <FavoritesStack.Screen
         options={{
           title: '',
         }}
-        name="EpisodeDetails"
-        component={EpisodeDetailsScreen}
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
       />
     </FavoritesStack.Navigator>
   )
@@ -158,6 +144,31 @@ const SearchStackNavigator = () => {
   )
 }
 
+const HomeStackNavigator = () => {
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme.color.blackLight,
+        },
+        headerTintColor: theme.color.primary,
+        headerTitleStyle: {
+          fontWeight: 'normal',
+          color: theme.color.white,
+        },
+        headerBackTitle: 'Retour',
+      }}>
+      <HomeStack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Home"
+        component={HomeScreen}
+      />
+    </HomeStack.Navigator>
+  )
+}
+
 const MainTabNavigator = () => {
   return (
     <MainTab.Navigator
@@ -188,8 +199,8 @@ const MainTabNavigator = () => {
             />
           ),
         }}
-        name="ListenNow"
-        component={ListenNowStackNavigator}
+        name="Home"
+        component={HomeStackNavigator}
       />
       <MainTab.Screen
         options={{
@@ -223,11 +234,7 @@ const MainTabNavigator = () => {
         options={{
           title: 'Favoris',
           tabBarIcon: (props) => (
-            <FontAwesome5
-              name={'heart'}
-              color={props.color}
-              size={theme.text.size.lg}
-            />
+            <Icon name="heart" size={theme.text.size.lg} color={props.color} />
           ),
         }}
         name="Favorites"

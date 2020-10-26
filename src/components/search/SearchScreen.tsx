@@ -31,35 +31,36 @@ const SearchScreen = () => {
   }
 
   return (
-    <Box f={1} bg="black">
-      <Text color="white" mt="sm" size="xxl" center bold>
+    <Box f={1} bg="black" p="sm">
+      <Text color="white" size="xxl" center bold mb="xs">
         Recherche
       </Text>
-      <Box h={50} w="100%" px="sm" my="sm">
-        <Box
-          dir="row"
-          align="center"
-          h={50}
-          bg="greyLightest"
-          radius={5}
-          px="sm">
-          <Box mr="xs">
-            <FontAwesome5
-              name={'search'}
-              size={theme.text.size.md}
-              color={theme.color.grey}
-            />
-          </Box>
-          <TextInput
-            style={s.input}
-            placeholder="Artistes, podcasts ou épisodes"
-            selectionColor={theme.color.primary}
-            onChangeText={setTerm}
-            autoCorrect={false}
-            onSubmitEditing={onSearch}
-            value={term}
+
+      <Box
+        dir="row"
+        align="center"
+        h={50}
+        bg="blackLight"
+        radius={5}
+        px="sm"
+        mb="xs">
+        <Box mr="xs">
+          <FontAwesome5
+            name={'search'}
+            size={theme.text.size.md}
+            color={theme.color.grey}
           />
         </Box>
+        <TextInput
+          style={s.input}
+          placeholder="Artistes, podcasts ou épisodes"
+          placeholderTextColor={theme.color.grey}
+          selectionColor={theme.color.primary}
+          onChangeText={setTerm}
+          autoCorrect={false}
+          onSubmitEditing={onSearch}
+          value={term}
+        />
       </Box>
 
       {error ? (
@@ -71,7 +72,46 @@ const SearchScreen = () => {
           keyboardShouldPersistTaps="never"
           contentContainerStyle={s.listContentContainer}
           data={data?.search ?? []}
-          ListHeaderComponent={<>{loading && <SearchLoader />}</>}
+          ListHeaderComponent={
+            <>
+              {loading ? (
+                <SearchLoader />
+              ) : data?.search ? (
+                data?.search.length === 0 ? (
+                  <Box dir="row" align="center" justify="center" mb="sm">
+                    <Box mr="xs">
+                      <FontAwesome5
+                        name={'exclamation-circle'}
+                        color={theme.color.primary}
+                        size={theme.text.size.md}
+                      />
+                    </Box>
+                    <Text color="primary" size="sm" center>
+                      Aucun résultat
+                    </Text>
+                  </Box>
+                ) : (
+                  <Text color="primary" mb="xs" size="sm" right>
+                    {data?.search.length} résultat
+                    {data?.search.length > 1 ? 's' : ''}
+                  </Text>
+                )
+              ) : (
+                <Box dir="row" align="center" justify="center" mb="md">
+                  <Box mr="xs">
+                    <FontAwesome5
+                      name={'info-circle'}
+                      color={theme.color.primary}
+                      size={theme.text.size.md}
+                    />
+                  </Box>
+                  <Text color="primary" size="sm" center>
+                    Veuillez rechercher un podcast !
+                  </Text>
+                </Box>
+              )}
+            </>
+          }
           ListEmptyComponent={<>{!loading && <SearchEmpty />}</>}
           keyExtractor={(item) => String(item.feedUrl)}
           renderItem={({item}) => <SearchTile item={item} />}
@@ -85,6 +125,7 @@ const s = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: theme.text.size.md,
+    color: theme.color.white,
   },
   listContentContainer: {
     // paddingBottom: 90

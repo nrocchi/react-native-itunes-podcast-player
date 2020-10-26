@@ -24,14 +24,15 @@ const HTMLReader = (props: Props) => {
         h5: {color: theme.color.white, marginTop: 10, marginBottom: 20},
         h6: {color: theme.color.white, marginTop: 10, marginBottom: 20},
         p: {
-          color: theme.color.white,
+          color: theme.color.grey,
           marginTop: 0,
           marginBottom: 10,
           textAlign: 'justify',
         },
-        ul: {color: theme.color.white},
-        ol: {color: theme.color.white},
+        ul: {color: theme.color.grey},
+        ol: {color: theme.color.grey},
         a: {color: theme.color.primary, fontWeight: 'bold'},
+        code: {color: theme.color.primary},
       }}
       renderers={{
         hr: () => (
@@ -43,9 +44,9 @@ const HTMLReader = (props: Props) => {
             }}
           />
         ),
-        /* ul: (htmlAttribs, children, convertedCSSStyles, passProps) => {
-          return <Text style={{ color: "white" }}>+</Text>;
-        } */
+        // ul: (htmlAttribs, children, convertedCSSStyles, passProps) => {
+        //   return <Text style={{color: 'white', display: 'flex'}}>•</Text>
+        // },
       }}
     />
   )
