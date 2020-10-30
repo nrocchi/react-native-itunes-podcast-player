@@ -22,9 +22,9 @@ This is the repos of my iTunes podcast player app I build using React-Native, Ap
   
 # Screenshots
 Recherche screen / Podcast screen / Episode screen + Mini Player / Player screen / Abonnements screen / Favoris screen<br />
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg" width="250">
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_3.jpg" width="250">
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_4.jpg" width="250">
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_5.jpg" width="250">
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_1.jpg" width="250">
-<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_6.jpg" width="250">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg" width="300">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_3.jpg" width="300">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_4.jpg" width="300">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_5.jpg" width="300">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_1.jpg" width="300">
+<img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_6.jpg" width="300">
