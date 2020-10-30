@@ -3,13 +3,16 @@
 This is the repos of my iTunes podcast player app I build using React-Native, Apollo GraphQL & Redux
 
 # Features
+  Search a podcast<br />
+  Search an episode<br />
+  Subscribe to a podcast<br />
   Like, dislike an episode<br />
   Nice ui<br />
-  Background<br />
-  Search a podcast<br />
-  Search inside a podcast, a certain episode<br />
-  Subscribe to a podcast<br />
+  Play the episode in background<br />
   Create playlist<br />
+  Mini bottom player<br />
+  Modal Player<br />
+  Convert published dates and genres with TDD<br />
   
 # Next features
   Mark as played<br />
@@ -17,11 +20,11 @@ This is the repos of my iTunes podcast player app I build using React-Native, Ap
   Able to sync between device<br />
   Social login<br />
 
-# Link to my graphQL Layer on Heroku
+# GraphQL Layer on Heroku
   https://itunes-podcast-api.herokuapp.com/
   
 # Screenshots
-Recherche screen / Podcast screen / Episode screen + Mini Player / Player screen / Abonnements screen / Favoris screen<br />
+Recherche screen - Podcast screen - Episode screen + Mini Player - Player screen - Abonnements screen - Favoris screen<br />
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg" width="300">
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_3.jpg" width="300">
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_4.jpg" width="300">
