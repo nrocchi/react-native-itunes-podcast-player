@@ -22,7 +22,7 @@ This is the repos of my iTunes podcast player app I build using React-Native, Ap
   
 # Screenshots
 Recherche screen<br />
-![Recherche screen](https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg?s=100)
+![Recherche screen](https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg|width=100px)
 
 !Podcast screen(https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_3.jpg?raw=true)
 
