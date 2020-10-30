@@ -24,7 +24,7 @@ This is the repos of my iTunes podcast player app I build using React-Native, Ap
   https://itunes-podcast-api.herokuapp.com/
   
 # Screenshots
-Search screen - Podcast screen - Episode screen + Mini Player - Player screen - Subscribes screen - Favorites screen<br />
+Search screen - Podcast screen - Episode screen + Mini Player - Modal player screen - Subscribes screen - Favorites screen<br />
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_2.jpg" width="300">
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_3.jpg" width="300">
 <img src="https://github.com/nrocchi/react-native-itunes-podcast-player/blob/master/screenshots/screenshot_4.jpg" width="300">
