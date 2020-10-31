@@ -1,6 +1,6 @@
 ﻿# react-native-itunes-podcast-player
 
-This is the repos of my iTunes podcast player app I build using React-Native, Apollo GraphQL & Redux
+This is the repos of my iTunes podcast player app I build using React-Native, Golang, Apollo GraphQL & Redux
 
 # Features
   Search a podcast<br />
