@@ -1,6 +1,6 @@
 import React from 'react'
 import {Box, Text} from 'react-native-design-utility'
-import {connect} from 'react-redux'
+import {connect, useSelector} from 'react-redux'
 import {
   ActivityIndicator,
   FlatList,
@@ -16,6 +16,11 @@ import {theme} from '../../constants/theme'
 import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import {makeHitSlop} from '../../constants/metrics'
+import {favoritesSelector} from '../../store/selectors/favoritesSelector'
+import {
+  deleteFavoriteAction,
+  sortFavoriteAction,
+} from '../../store/actions/favoritesActions'
 
 const FavoritesScreen = (props: {
   favorites?: any
@@ -25,20 +30,11 @@ const FavoritesScreen = (props: {
   const playerContext = usePlayerContext()
 
   function _deleteFavorite(favorite: any) {
-    const action = {
-      type: 'DELETE_FAVORITE',
-      value: favorite,
-    }
-
-    props.dispatch(action)
+    props.dispatch(deleteFavoriteAction(favorite))
   }
 
   function _sortFavorite(sortType: string) {
-    const action = {
-      type: 'SORT_FAVORITE',
-      value: sortType,
-    }
-    props.dispatch(action)
+    props.dispatch(sortFavoriteAction(sortType))
   }
 
   return (
@@ -49,7 +45,7 @@ const FavoritesScreen = (props: {
 
       <FlatList
         data={props.favorites}
-        keyExtractor={(item) => String(item.linkUrl)}
+        keyExtractor={(item) => item.linkUrl.toString()}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'flex-start',
@@ -57,7 +53,7 @@ const FavoritesScreen = (props: {
         ListHeaderComponent={
           props.favorites.length && (
             <Box dir="row" align="center" justify="start">
-              <TouchableOpacity onPress={() => _sortFavorite('date')}>
+              <TouchableOpacity onPress={() => _sortFavorite('pubDate')}>
                 <Box dir="row" align="center" mr="sm">
                   <FontAwesome5
                     name={'sort-amount-up-alt'}
@@ -234,7 +230,7 @@ const s = StyleSheet.create({
 
 const mapStateToProps = (state: any) => {
   return {
-    favorites: state.favorites,
+    favorites: favoritesSelector(state),
   }
 }
 

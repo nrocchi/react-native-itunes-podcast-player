@@ -122,7 +122,7 @@ const PodcastDetailsScreen = (props: {
     <Box f={1} bg="black">
       <FlatList
         data={data?.feed}
-        keyExtractor={(item) => item.linkUrl}
+        keyExtractor={(item) => item.linkUrl.toString()}
         ListHeaderComponent={
           <>
             <Box dir="row" px="sm" mt="sm" mb="sm" center>

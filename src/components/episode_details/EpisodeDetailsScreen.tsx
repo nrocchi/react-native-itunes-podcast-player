@@ -12,6 +12,8 @@ import {getMonth, getWeekDay, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import HTMLReader from '../utils/HTMLReader'
 import {makeHitSlop} from '../../constants/metrics'
+import {favoritesSelector} from '../../store/selectors/favoritesSelector'
+import {toggleFavoriteAction} from '../../store/actions/favoritesActions'
 
 const EpisodeDetailsScreen = (props: {
   favorites?: any
@@ -41,12 +43,7 @@ const EpisodeDetailsScreen = (props: {
       date: new Date('now'),
     }
 
-    const action = {
-      type: 'TOGGLE_FAVORITE',
-      value: episodeWithPodcastInfo,
-    }
-
-    props.dispatch(action)
+    props.dispatch(toggleFavoriteAction(episodeWithPodcastInfo))
   }
 
   return (
@@ -63,9 +60,11 @@ const EpisodeDetailsScreen = (props: {
               <Image
                 source={{
                   uri:
-                    (routeParams.episode.image ||
-                      (props.favorites && props.favorites.image)) ??
-                    (routeParams.podcast.thumbnail || routeParams.podcastThumb),
+                    routeParams.episode.image ||
+                    (props.favorites && props.favorites.image)
+                      ? routeParams.episode.image || props.favorites.image
+                      : routeParams.podcast.thumbnail ||
+                        routeParams.podcastThumb,
                 }}
                 style={{flex: 1}}
               />
@@ -245,12 +244,15 @@ const EpisodeDetailsScreen = (props: {
             </Text>
             {routeParams.episode.description ||
             props.favorites.description ||
-            routeParams.episode.summary ? (
+            routeParams.episode.summary ||
+            props.favorites.summary ? (
               <HTMLReader
                 html={
-                  (routeParams.episode.description ||
-                    props.favorites.description) ??
-                  routeParams.episode.summary
+                  routeParams.episode.description ||
+                  (props.favorites && props.favorites.description)
+                    ? routeParams.episode.description ||
+                      props.favorites.description
+                    : routeParams.episode.summary
                 }
               />
             ) : (
@@ -300,7 +302,7 @@ const EpisodeDetailsScreen = (props: {
 
 const mapStateToProps = (state: any) => {
   return {
-    favorites: state.favorites,
+    favorites: favoritesSelector(state),
   }
 }
 

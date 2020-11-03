@@ -1,9 +1,13 @@
 const initialState = {favorites: []}
 
-function toggleFavorite(state = initialState, action) {
+export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
+export const DELETE_FAVORITE = 'DELETE_FAVORITE'
+export const SORT_FAVORITE = 'SORT_FAVORITE'
+
+function favoriteReducer(state = initialState, action) {
   let nextState
   switch (action.type) {
-    case 'TOGGLE_FAVORITE':
+    case TOGGLE_FAVORITE:
       const favoriteIndex = state.favorites.findIndex(
         (item) => item.linkUrl === action.value.linkUrl,
       )
@@ -24,7 +28,7 @@ function toggleFavorite(state = initialState, action) {
       }
       return nextState || state
 
-    case 'DELETE_FAVORITE':
+    case DELETE_FAVORITE:
       const favoriteDeleteIndex = state.favorites.findIndex(
         (item) => item.linkUrl === action.value.linkUrl,
       )
@@ -42,13 +46,12 @@ function toggleFavorite(state = initialState, action) {
       }
       return nextState || state
 
-    case 'SORT_FAVORITE':
+    case SORT_FAVORITE:
       const sortByKey = (key) => (a, b) => (a[key] > b[key] ? 1 : -1)
-      const sortType = action.value
 
       nextState = {
         ...state,
-        favorites: state.favorites.slice().sort(sortByKey(sortType)),
+        favorites: state.favorites.slice().sort(sortByKey(action.value)),
       }
 
       return nextState || state
@@ -58,4 +61,4 @@ function toggleFavorite(state = initialState, action) {
   }
 }
 
-export default toggleFavorite
+export default favoriteReducer

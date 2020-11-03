@@ -34,20 +34,20 @@ const HTMLReader = (props: Props) => {
         a: {color: theme.color.primary, fontWeight: 'bold'},
         code: {color: theme.color.primary},
       }}
-      renderers={{
-        hr: () => (
-          <View
-            style={{
-              width: '100%',
-              height: 1,
-              backgroundColor: theme.color.white,
-            }}
-          />
-        ),
-        // ul: (htmlAttribs, children, convertedCSSStyles, passProps) => {
-        //   return <Text style={{color: 'white', display: 'flex'}}>•</Text>
-        // },
-      }}
+      // renderers={{
+      //   hr: () => (
+      //     <View
+      //       style={{
+      //         width: '100%',
+      //         height: 1,
+      //         backgroundColor: theme.color.white,
+      //       }}
+      //     />
+      //   ),
+      //   ul: (htmlAttribs, children, convertedCSSStyles, passProps) => {
+      //     return <Text style={{color: 'white', display: 'flex'}}>•</Text>
+      //   },
+      // }}
     />
   )
 }
