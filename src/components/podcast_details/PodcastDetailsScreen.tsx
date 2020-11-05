@@ -27,7 +27,8 @@ import {usePlayerContext} from '../../context/PlayerContext'
 import {DBContext} from '../../context/DBContext'
 import {PodcastModel} from '../../models/PodcastModel'
 import {makeHitSlop} from '../../constants/metrics'
-import HTMLReader from '../utils/HTMLReader'
+import {favoritesSelector} from '../../store/selectors/favoritesSelector'
+import {toggleFavoriteAction} from '../../store/actions/favoritesActions'
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>
 
@@ -110,12 +111,7 @@ const PodcastDetailsScreen = (props: {
       podcastName: podcast_artist,
     }
 
-    const action = {
-      type: 'TOGGLE_FAVORITE',
-      value: episodeWithPodcastInfo,
-    }
-
-    props.dispatch(action)
+    props.dispatch(toggleFavoriteAction(episodeWithPodcastInfo))
   }
 
   return (
@@ -461,7 +457,7 @@ const s = StyleSheet.create({
 
 const mapStateToProps = (state: any) => {
   return {
-    favorites: state.favorites,
+    favorites: favoritesSelector(state),
   }
 }
 

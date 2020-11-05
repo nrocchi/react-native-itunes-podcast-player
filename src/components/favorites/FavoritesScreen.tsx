@@ -1,14 +1,7 @@
 import React from 'react'
 import {Box, Text} from 'react-native-design-utility'
-import {connect, useSelector} from 'react-redux'
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
+import {connect} from 'react-redux'
+import {FlatList, Image, StyleSheet, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -53,7 +46,7 @@ const FavoritesScreen = (props: {
         ListHeaderComponent={
           props.favorites.length && (
             <Box dir="row" align="center" justify="start">
-              <TouchableOpacity onPress={() => _sortFavorite('pubDate')}>
+              <TouchableOpacity onPress={() => _sortFavorite('added')}>
                 <Box dir="row" align="center" mr="sm">
                   <FontAwesome5
                     name={'sort-amount-up-alt'}
@@ -134,7 +127,7 @@ const FavoritesScreen = (props: {
                   </Box>
                 )}
                 <Box f={1} mr="xs">
-                  <Text color="white" bold numberOfLines={2}>
+                  <Text color="white" bold numberOfLines={1}>
                     {item.title}
                   </Text>
                   <Text color="grey" size="xs" numberOfLines={1}>
@@ -230,7 +223,7 @@ const s = StyleSheet.create({
 
 const mapStateToProps = (state: any) => {
   return {
-    favorites: favoritesSelector(state.favorites),
+    favorites: favoritesSelector(state),
   }
 }
 
