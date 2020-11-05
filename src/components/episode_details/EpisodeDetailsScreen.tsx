@@ -302,7 +302,7 @@ const EpisodeDetailsScreen = (props: {
 
 const mapStateToProps = (state: any) => {
   return {
-    favorites: favoritesSelector(state),
+    favorites: favoritesSelector(state.favorites),
   }
 }
 
