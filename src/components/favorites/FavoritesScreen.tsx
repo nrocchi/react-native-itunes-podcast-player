@@ -9,11 +9,11 @@ import {theme} from '../../constants/theme'
 import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import {makeHitSlop} from '../../constants/metrics'
-import {favoritesSelector} from '../../store/selectors/favoritesSelector'
+import {favoritesSelector} from '../../store/favorites/favoritesSelector'
 import {
   deleteFavoriteAction,
   sortFavoriteAction,
-} from '../../store/actions/favoritesActions'
+} from '../../store/favorites/favoritesActions'
 
 const FavoritesScreen = (props: {
   favorites?: any
@@ -181,11 +181,13 @@ const FavoritesScreen = (props: {
                       )}
                     </Box>
 
-                    <Box f={1}>
+                    <Box f={1} dir="row">
                       <Text size="xs" color="primary">
                         {item.duration && humanDuration(item.duration)}
                       </Text>
-                      {/* <Text size="xs" color="green" ml="xs">({item.duration})</Text> */}
+                      {/* <Text size="xs" color="green" ml="xs">
+                        ({item.duration})
+                      </Text> */}
                     </Box>
 
                     <Text size="xs" color="grey">

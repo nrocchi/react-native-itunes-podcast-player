@@ -14,7 +14,7 @@ import MainStackNavigator from './src/navigators/MainStackNavigator'
 import {client} from './src/graphql/client'
 import {PlayerContextProvider} from './src/context/PlayerContext'
 import {DBProvider} from './src/context/DBContext'
-import {store, persistor} from './src/store/configureStore'
+import {store, persistor} from './src/store/configStore'
 
 const App = () => {
   const [isReady, setIsReady] = React.useState<boolean>(false)

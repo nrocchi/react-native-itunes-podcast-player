@@ -2,7 +2,7 @@ import {createStore} from 'redux'
 import {persistReducer, persistStore} from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import favoriteReducer from './reducers/favoriteReducer'
+import favoriteReducer from './favorites/favoritesReducer'
 
 const persistConfig = {
   key: 'root',

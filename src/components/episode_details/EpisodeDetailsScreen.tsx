@@ -12,8 +12,8 @@ import {getMonth, getWeekDay, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
 import HTMLReader from '../utils/HTMLReader'
 import {makeHitSlop} from '../../constants/metrics'
-import {favoritesSelector} from '../../store/selectors/favoritesSelector'
-import {toggleFavoriteAction} from '../../store/actions/favoritesActions'
+import {favoritesSelector} from '../../store/favorites/favoritesSelector'
+import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
 
 const EpisodeDetailsScreen = (props: {
   favorites?: any

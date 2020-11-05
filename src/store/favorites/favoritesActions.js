@@ -2,7 +2,7 @@ import {
   TOGGLE_FAVORITE,
   DELETE_FAVORITE,
   SORT_FAVORITE,
-} from '../reducers/favoriteReducer'
+} from './favoritesReducer'
 
 export const toggleFavoriteAction = (favorite) => ({
   type: TOGGLE_FAVORITE,

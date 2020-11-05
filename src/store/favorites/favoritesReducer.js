@@ -4,7 +4,7 @@ export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
 export const DELETE_FAVORITE = 'DELETE_FAVORITE'
 export const SORT_FAVORITE = 'SORT_FAVORITE'
 
-function favoriteReducer(state = initialState, action) {
+function favoritesReducer(state = initialState, action) {
   let nextState
   switch (action.type) {
     case TOGGLE_FAVORITE:
@@ -61,4 +61,4 @@ function favoriteReducer(state = initialState, action) {
   }
 }
 
-export default favoriteReducer
+export default favoritesReducer

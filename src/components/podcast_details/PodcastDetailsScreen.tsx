@@ -27,8 +27,8 @@ import {usePlayerContext} from '../../context/PlayerContext'
 import {DBContext} from '../../context/DBContext'
 import {PodcastModel} from '../../models/PodcastModel'
 import {makeHitSlop} from '../../constants/metrics'
-import {favoritesSelector} from '../../store/selectors/favoritesSelector'
-import {toggleFavoriteAction} from '../../store/actions/favoritesActions'
+import {favoritesSelector} from '../../store/favorites/favoritesSelector'
+import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>
 
@@ -238,7 +238,7 @@ const PodcastDetailsScreen = (props: {
                           url: elt.linkUrl,
                           artist: podcastData.artist,
                           date: elt.pubDate,
-                          duration: elt.duration,
+                          duration: parseFloat(elt.duration),
                         })
                       }}>
                       <Icon
@@ -419,7 +419,7 @@ const PodcastDetailsScreen = (props: {
                               url: item.linkUrl,
                               artist: podcastData.artist,
                               date: item.pubDate,
-                              duration: item.duration,
+                              duration: parseFloat(item.duration),
                             })
                           }>
                           <Icon
@@ -434,7 +434,9 @@ const PodcastDetailsScreen = (props: {
                       <Text size="xs" color="primary">
                         {humanDuration(item.duration)}
                       </Text>
-                      {/* <Text size="xs" color="green" ml="xs">({item.duration})</Text> */}
+                      <Text size="xs" color="green" ml="xs">
+                        ({item.duration})
+                      </Text>
                     </Box>
                   </Box>
                 </Box>
