@@ -5,11 +5,9 @@ import {Image, ScrollView, StyleSheet, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import {theme} from '../../constants/theme'
-import {DBContext} from '../../context/DBContext'
 import HomeTabNavigator from '../../navigators/HomeTabNavigator'
 
-const LibraryScreen = () => {
-  const dbContext = React.useContext(DBContext)
+const HomeScreen = () => {
   const navigation = useNavigation()
 
   return (
@@ -29,4 +27,4 @@ const s = StyleSheet.create({
   },
 })
 
-export default LibraryScreen
+export default HomeScreen

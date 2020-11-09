@@ -4,10 +4,8 @@ import {Image, ScrollView, StyleSheet, TouchableOpacity} from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import {useNavigation} from '@react-navigation/native'
 import {theme} from '../../constants/theme'
-import {DBContext} from '../../context/DBContext'
 
 const SearchEmpty = () => {
-  const dbContext = React.useContext(DBContext)
   const navigation = useNavigation()
 
   return (

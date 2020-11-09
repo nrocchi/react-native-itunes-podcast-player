@@ -14,6 +14,7 @@ import HTMLReader from '../utils/HTMLReader'
 import {makeHitSlop} from '../../constants/metrics'
 import {favoritesSelector} from '../../store/favorites/favoritesSelector'
 import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
+import {subscribesSelector} from '../../store/subscribes/subscribesSelector'
 
 const EpisodeDetailsScreen = (props: {
   favorites?: any
@@ -35,12 +36,13 @@ const EpisodeDetailsScreen = (props: {
       image: routeParams.episode.image,
       linkUrl: routeParams.episode.linkUrl,
       summary: routeParams.episode.summary,
+      author: routeParams.podcast.artist,
       text: routeParams.episode.text,
       duration: routeParams.episode.duration,
       pubDate: routeParams.episode.pubDate,
       thumbnail: routeParams.podcast.thumbnail,
       podcastName: routeParams.podcast.artist,
-      date: new Date('now'),
+      added: Date.now(),
     }
 
     props.dispatch(toggleFavoriteAction(episodeWithPodcastInfo))

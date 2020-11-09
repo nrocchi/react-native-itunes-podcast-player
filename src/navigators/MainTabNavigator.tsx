@@ -8,25 +8,24 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import {theme} from '../constants/theme'
-import LibraryScreen from '../components/library/LibraryScreen'
+import SubscribesScreen from '../components/subscribes/SubscribesScreen'
 import SearchScreen from '../components/search/SearchScreen'
 import PodcastDetailsScreen from '../components/podcast_details/PodcastDetailsScreen'
 import MiniPlayer from '../components/mini_player/MiniPlayer'
 import EpisodeDetailsScreen from '../components/episode_details/EpisodeDetailsScreen'
-// eslint-disable-next-line import/no-named-as-default-member
 import FavoritesScreen from '../components/favorites/FavoritesScreen'
 import HomeScreen from '../components/home/HomeScreen'
 
 const MainTab = createBottomTabNavigator()
 
-const LibraryStack = createStackNavigator()
+const SubscribesStack = createStackNavigator()
 const SearchStack = createStackNavigator()
 const FavoritesStack = createStackNavigator()
 const HomeStack = createStackNavigator()
 
-const LibraryStackNavigator = () => {
+const SubscribesStackNavigator = () => {
   return (
-    <LibraryStack.Navigator
+    <SubscribesStack.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: theme.color.blackLight,
@@ -38,29 +37,29 @@ const LibraryStackNavigator = () => {
         },
         headerBackTitle: 'Retour',
       }}>
-      <LibraryStack.Screen
+      <SubscribesStack.Screen
         options={{
           headerShown: false,
         }}
-        name="Library"
-        component={LibraryScreen}
+        name="Subscribes"
+        component={SubscribesScreen}
       />
 
-      <LibraryStack.Screen
+      <SubscribesStack.Screen
         options={{
           title: '',
         }}
         name="PodcastDetails"
         component={PodcastDetailsScreen}
       />
-      <LibraryStack.Screen
+      <SubscribesStack.Screen
         options={{
           title: '',
         }}
         name="EpisodeDetails"
         component={EpisodeDetailsScreen}
       />
-    </LibraryStack.Navigator>
+    </SubscribesStack.Navigator>
   )
 }
 
@@ -227,8 +226,8 @@ const MainTabNavigator = () => {
             />
           ),
         }}
-        name="Library"
-        component={LibraryStackNavigator}
+        name="Subscribes"
+        component={SubscribesStackNavigator}
       />
       <MainTab.Screen
         options={{

@@ -1,10 +1,18 @@
-const initialState = {favorites: []}
+import {
+  Favorite,
+  TOGGLE_FAVORITE,
+  DELETE_FAVORITE,
+  SORT_FAVORITE,
+  FavoritesActionTypes,
+  FavoritesState,
+} from './types'
 
-export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
-export const DELETE_FAVORITE = 'DELETE_FAVORITE'
-export const SORT_FAVORITE = 'SORT_FAVORITE'
+const initialState: FavoritesState = {favorites: []}
 
-function favoritesReducer(state = initialState, action) {
+function handleFavoritesReducer(
+  state = initialState,
+  action: FavoritesActionTypes | any,
+): FavoritesState {
   let nextState
   switch (action.type) {
     case TOGGLE_FAVORITE:
@@ -47,7 +55,8 @@ function favoritesReducer(state = initialState, action) {
       return nextState || state
 
     case SORT_FAVORITE:
-      const sortByKey = (key) => (a, b) => (a[key] > b[key] ? 1 : -1)
+      const sortByKey = (key: any) => (a: any, b: any) =>
+        a[key] > b[key] ? 1 : -1
 
       nextState = {
         ...state,
@@ -61,4 +70,4 @@ function favoritesReducer(state = initialState, action) {
   }
 }
 
-export default favoritesReducer
+export default handleFavoritesReducer

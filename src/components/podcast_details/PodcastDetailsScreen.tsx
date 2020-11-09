@@ -24,16 +24,17 @@ import {
 } from '../../types/graphql'
 import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
-import {DBContext} from '../../context/DBContext'
-import {PodcastModel} from '../../models/PodcastModel'
 import {makeHitSlop} from '../../constants/metrics'
 import {favoritesSelector} from '../../store/favorites/favoritesSelector'
 import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
+import {subscribesSelector} from '../../store/subscribes/subscribesSelector'
+import {toggleSubscribeAction} from '../../store/subscribes/subscribesActions'
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>
 
 const PodcastDetailsScreen = (props: {
   favorites?: any
+  subscribes?: any
   dispatch: (arg0: {type: string; value: any}) => void
 }) => {
   const playerContext = usePlayerContext()
@@ -43,7 +44,6 @@ const PodcastDetailsScreen = (props: {
     podcast: SearchQuery_search
   }
   const {data: podcastData} = useRoute<NavigationParams>().params ?? {}
-  const dbContext = React.useContext(DBContext)
 
   const {data, loading} = useQuery<FeedQuery, FeedQueryVariables>(feedQuery, {
     variables: {
@@ -53,44 +53,31 @@ const PodcastDetailsScreen = (props: {
 
   const genres = podcastData.genres.toString().split(',')
 
-  function handleSub() {
-    dbContext
-      .subToPodcast(
-        new PodcastModel({
-          episodesCount: podcastData.episodesCount,
-          thumbnail: podcastData.thumbnail,
-          feedUrl: podcastData.feedUrl,
-          name: podcastData.podcastName || podcastData.name,
-          artist: podcastData.artist,
-          genres: podcastData.genres.toString(),
-        }),
-      )
-      .then((r) => {
-        console.log('podcast is sub')
-      })
-      .catch((e) => {
-        console.log('podcast is not sub error :', e)
-      })
-  }
+  console.log('*******************************************************')
+  console.log(data?.feed)
+  console.log('*********************************************************')
+  console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+  console.log(podcastData)
+  console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+  console.log('-------------------------------------------------------')
+  console.log(props.subscribes)
+  console.log('-------------------------------------------------------')
+  console.log('/////////////////////////////////////////////////////')
+  console.log(props.favorites)
+  console.log('/////////////////////////////////////////////////////')
 
-  function handleDeleteSub() {
-    dbContext
-      .delPodcast(
-        new PodcastModel({
-          episodesCount: podcastData.episodesCount,
-          thumbnail: podcastData.thumbnail,
-          feedUrl: podcastData.feedUrl,
-          name: podcastData.podcastName || podcastData.name,
-          artist: podcastData.artist,
-          genres: podcastData.genres.toString(),
-        }),
-      )
-      .then((r) => {
-        console.log('podcast delete')
-      })
-      .catch((e) => {
-        console.log('podcast not delete error :', e)
-      })
+  function _toggleSubscribe() {
+    const podcastInfo = {
+      thumbnail: podcastData.thumbnail,
+      feedUrl: podcastData.feedUrl,
+      artist: podcastData.artist,
+      genres: podcastData.genres,
+      name: podcastData.podcastName || podcastData.name,
+      episodesCount: podcastData.episodesCount,
+      added: Date.now(),
+    }
+
+    props.dispatch(toggleSubscribeAction(podcastInfo))
   }
 
   function _toggleFavorite(
@@ -103,12 +90,14 @@ const PodcastDetailsScreen = (props: {
       description: favorite.description,
       image: favorite.image,
       linkUrl: favorite.linkUrl,
+      author: podcast_artist,
       summary: favorite.summary,
       text: favorite.text,
       duration: favorite.duration,
       pubDate: favorite.pubDate,
       thumbnail: podcast_thumbnail,
       podcastName: podcast_artist,
+      added: Date.now(),
     }
 
     props.dispatch(toggleFavoriteAction(episodeWithPodcastInfo))
@@ -138,21 +127,25 @@ const PodcastDetailsScreen = (props: {
                   {podcastData.artist}
                 </Text>
                 <Box dir="row" align="center">
-                  {!dbContext.isSub ? (
-                    <TouchableOpacity onPress={() => handleSub()}>
+                  {props.subscribes.findIndex(
+                    (item: {feedUrl: string}) =>
+                      item.feedUrl === podcastData.feedUrl ||
+                      props.subscribes.feedUrl,
+                  ) !== -1 ? (
+                    <TouchableOpacity onPress={() => _toggleSubscribe()}>
                       <Box
                         radius="sm"
-                        bg={theme.color.primary}
+                        bg={theme.color.white}
                         px="xs"
                         py={5}
                         center>
-                        <Text color="white" bold size="xs" uppercase>
-                          S'abonner
+                        <Text color="primary" bold size="xs" uppercase>
+                          Abonné
                         </Text>
                       </Box>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity onPress={() => handleDeleteSub()}>
+                    <TouchableOpacity onPress={() => _toggleSubscribe()}>
                       <Box
                         radius="sm"
                         bg={theme.color.primary}
@@ -277,7 +270,7 @@ const PodcastDetailsScreen = (props: {
             )}
           </>
         }
-        extraData={props.favorites}
+        extraData={props.subscribes}
         renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
@@ -311,7 +304,7 @@ const PodcastDetailsScreen = (props: {
                     </Text>
                   </Box>
 
-                  {props.favorites.findIndex(
+                  {/* {props.favorites.findIndex(
                     (fav: {linkUrl: string}) => fav.linkUrl === item.linkUrl,
                   ) !== -1 ? (
                     // The episode is in favorite redux state
@@ -350,7 +343,7 @@ const PodcastDetailsScreen = (props: {
                         />
                       </TouchableOpacity>
                     </Box>
-                  )}
+                  )} */}
                 </Box>
                 <Box>
                   <Text size="xs" color="white" mb="xs">
@@ -434,9 +427,9 @@ const PodcastDetailsScreen = (props: {
                       <Text size="xs" color="primary">
                         {humanDuration(item.duration)}
                       </Text>
-                      <Text size="xs" color="green" ml="xs">
+                      {/* <Text size="xs" color="green" ml="xs">
                         ({item.duration})
-                      </Text>
+                      </Text> */}
                     </Box>
                   </Box>
                 </Box>
@@ -460,6 +453,7 @@ const s = StyleSheet.create({
 const mapStateToProps = (state: any) => {
   return {
     favorites: favoritesSelector(state),
+    subscribes: subscribesSelector(state),
   }
 }
 

@@ -13,7 +13,6 @@ import {theme} from './src/constants/theme'
 import MainStackNavigator from './src/navigators/MainStackNavigator'
 import {client} from './src/graphql/client'
 import {PlayerContextProvider} from './src/context/PlayerContext'
-import {DBProvider} from './src/context/DBContext'
 import {store, persistor} from './src/store/configStore'
 
 const App = () => {
@@ -25,8 +24,6 @@ const App = () => {
 
   React.useEffect(() => {
     TrackPlayer.setupPlayer().then(() => {
-      console.log('TrackPlayer is setup')
-
       TrackPlayer.updateOptions({
         capabilities: [
           TrackPlayer.CAPABILITY_PLAY,
@@ -39,30 +36,29 @@ const App = () => {
       })
 
       setIsReady(true)
+      console.log('TrackPlayer is ready')
     })
   }, [])
 
   return (
     <UtilityThemeProvider theme={theme}>
-      <DBProvider>
-        <ApolloProvider client={client}>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              {isReady ? (
-                <PlayerContextProvider>
-                  <NavigationContainer>
-                    <MainStackNavigator />
-                  </NavigationContainer>
-                </PlayerContextProvider>
-              ) : (
-                <Box f={1} center bg="black">
-                  <ActivityIndicator />
-                </Box>
-              )}
-            </PersistGate>
-          </Provider>
-        </ApolloProvider>
-      </DBProvider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            {isReady ? (
+              <PlayerContextProvider>
+                <NavigationContainer>
+                  <MainStackNavigator />
+                </NavigationContainer>
+              </PlayerContextProvider>
+            ) : (
+              <Box f={1} center bg="black">
+                <ActivityIndicator />
+              </Box>
+            )}
+          </PersistGate>
+        </Provider>
+      </ApolloProvider>
     </UtilityThemeProvider>
   )
 }

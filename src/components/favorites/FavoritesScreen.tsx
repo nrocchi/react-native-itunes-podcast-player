@@ -14,15 +14,20 @@ import {
   deleteFavoriteAction,
   sortFavoriteAction,
 } from '../../store/favorites/favoritesActions'
+import {
+  Favorite,
+  FavoritesActionTypes,
+  FavoritesState,
+} from '../../store/favorites/types'
 
 const FavoritesScreen = (props: {
-  favorites?: any
-  dispatch: (arg0: {type: string; value: any}) => void
+  favorites: any
+  dispatch: (arg0: FavoritesActionTypes) => void
 }) => {
   const navigation = useNavigation()
   const playerContext = usePlayerContext()
 
-  function _deleteFavorite(favorite: any) {
+  function _deleteFavorite(favorite: Favorite) {
     props.dispatch(deleteFavoriteAction(favorite))
   }
 
@@ -36,15 +41,15 @@ const FavoritesScreen = (props: {
         Favoris
       </Text>
 
-      <FlatList
+      <FlatList<Favorite>
         data={props.favorites}
-        keyExtractor={(item) => item.linkUrl.toString()}
+        keyExtractor={(item: Favorite) => item.linkUrl.toString()}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'flex-start',
         }}
         ListHeaderComponent={
-          props.favorites.length && (
+          props.favorites?.length && (
             <Box dir="row" align="center" justify="start">
               <TouchableOpacity onPress={() => _sortFavorite('added')}>
                 <Box dir="row" align="center" mr="sm">
@@ -99,12 +104,12 @@ const FavoritesScreen = (props: {
                 />
               </Box>
               <Text color="white" size="sm" center>
-                Aucun épisode favori
+                Aucun épisode
               </Text>
             </Box>
           </Box>
         }
-        renderItem={({item}) => (
+        renderItem={({item}: {item: Favorite}) => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('EpisodeDetails', {
@@ -169,7 +174,7 @@ const FavoritesScreen = (props: {
                               url: item.linkUrl,
                               artist: item.author || item.podcastName,
                               date: item.pubDate,
-                              duration: item.duration,
+                              duration: parseFloat(item.duration),
                             })
                           }>
                           <Icon
@@ -223,13 +228,13 @@ const s = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: FavoritesState) => {
   return {
     favorites: favoritesSelector(state),
   }
 }
 
-const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
+const mapDispatchToProps = (dispatch: (arg0: FavoritesActionTypes) => void) => {
   return {
     dispatch: (action: any) => {
       dispatch(action)
