@@ -6,7 +6,7 @@ import {
   SubscribesActionTypes,
 } from './types'
 
-const initialState: any = {subscribes: []}
+const initialState = {subscribes: []}
 
 function subscribesReducer(
   state = initialState,
@@ -16,14 +16,14 @@ function subscribesReducer(
   switch (action.type) {
     case TOGGLE_SUBSCRIBE:
       const subscribeIndex = state.subscribes.findIndex(
-        (item: any) => item.name === action.value.name,
+        (item: Subscribe) => item.name === action.value.name,
       )
       if (subscribeIndex !== -1) {
         // est déjà dans les abonnements, on le supprime de la liste
         nextState = {
           ...state,
           subscribes: state.subscribes.filter(
-            (item: any, index: any) => index !== subscribeIndex,
+            (item: Subscribe, index: any) => index !== subscribeIndex,
           ),
         }
       } else {
@@ -37,14 +37,14 @@ function subscribesReducer(
 
     case DELETE_SUBSCRIBE:
       const subscribeDeleteIndex = state.subscribes.findIndex(
-        (item: any) => item.name === action.value.name,
+        (item: Subscribe) => item.name === action.value.name,
       )
       if (subscribeDeleteIndex !== -1) {
         // est déjà dans les abonnements, on le supprime de la liste
         nextState = {
           ...state,
           subscribes: state.subscribes.filter(
-            (item: any, index: any) => index !== subscribeDeleteIndex,
+            (item, index) => index !== subscribeDeleteIndex,
           ),
         }
       } else {
