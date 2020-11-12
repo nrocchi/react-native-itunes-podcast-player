@@ -14,20 +14,15 @@ import {
   deleteFavoriteAction,
   sortFavoriteAction,
 } from '../../store/favorites/favoritesActions'
-import {
-  Favorite,
-  FavoritesActionTypes,
-  FavoritesState,
-} from '../../store/favorites/types'
 
 const FavoritesScreen = (props: {
   favorites: any
-  dispatch: (arg0: FavoritesActionTypes) => void
+  dispatch: (arg0: any) => void
 }) => {
   const navigation = useNavigation()
   const playerContext = usePlayerContext()
 
-  function _deleteFavorite(favorite: Favorite) {
+  function _deleteFavorite(favorite: any) {
     props.dispatch(deleteFavoriteAction(favorite))
   }
 
@@ -41,9 +36,9 @@ const FavoritesScreen = (props: {
         Favoris
       </Text>
 
-      <FlatList<Favorite>
+      <FlatList
         data={props.favorites}
-        keyExtractor={(item: Favorite) => item.linkUrl.toString()}
+        keyExtractor={(item) => item.linkUrl.toString()}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'flex-start',
@@ -109,7 +104,7 @@ const FavoritesScreen = (props: {
             </Box>
           </Box>
         }
-        renderItem={({item}: {item: Favorite}) => (
+        renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('EpisodeDetails', {
@@ -228,13 +223,13 @@ const s = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: FavoritesState) => {
+const mapStateToProps = (state: any) => {
   return {
     favorites: favoritesSelector(state),
   }
 }
 
-const mapDispatchToProps = (dispatch: (arg0: FavoritesActionTypes) => void) => {
+const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
   return {
     dispatch: (action: any) => {
       dispatch(action)

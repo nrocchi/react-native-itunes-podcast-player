@@ -5,18 +5,20 @@ import {Box, UtilityThemeProvider} from 'react-native-design-utility'
 import {ApolloProvider} from '@apollo/react-hooks'
 import TrackPlayer from 'react-native-track-player'
 import SplashScreen from 'react-native-splash-screen'
-
 import {ActivityIndicator} from 'react-native'
-import {Provider} from 'react-redux'
 import {PersistGate} from 'redux-persist/integration/react'
+import {Provider} from 'react-redux'
+import {persistStore} from 'redux-persist'
 import {theme} from './src/constants/theme'
 import MainStackNavigator from './src/navigators/MainStackNavigator'
 import {client} from './src/graphql/client'
 import {PlayerContextProvider} from './src/context/PlayerContext'
-import {store, persistor} from './src/store/configStore'
+
+import store from './src/store/configStore'
 
 const App = () => {
   const [isReady, setIsReady] = React.useState<boolean>(false)
+  const persistor = persistStore(store)
 
   React.useEffect(() => {
     SplashScreen.hide()

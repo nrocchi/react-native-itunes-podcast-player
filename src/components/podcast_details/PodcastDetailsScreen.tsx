@@ -57,7 +57,7 @@ const PodcastDetailsScreen = (props: {
   console.log(data?.feed)
   console.log('*********************************************************')
   console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-  console.log(podcastData)
+  console.log(props)
   console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
   console.log('-------------------------------------------------------')
   console.log(props.subscribes)
@@ -304,7 +304,7 @@ const PodcastDetailsScreen = (props: {
                     </Text>
                   </Box>
 
-                  {/* {props.favorites.findIndex(
+                  {props.favorites.findIndex(
                     (fav: {linkUrl: string}) => fav.linkUrl === item.linkUrl,
                   ) !== -1 ? (
                     // The episode is in favorite redux state
@@ -343,7 +343,7 @@ const PodcastDetailsScreen = (props: {
                         />
                       </TouchableOpacity>
                     </Box>
-                  )} */}
+                  )}
                 </Box>
                 <Box>
                   <Text size="xs" color="white" mb="xs">
@@ -451,6 +451,7 @@ const s = StyleSheet.create({
 })
 
 const mapStateToProps = (state: any) => {
+  console.log(state)
   return {
     favorites: favoritesSelector(state),
     subscribes: subscribesSelector(state),

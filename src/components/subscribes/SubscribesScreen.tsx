@@ -10,17 +10,13 @@ import {
   deleteSubscribeAction,
   sortSubscribeAction,
 } from '../../store/subscribes/subscribesActions'
-import {
-  Subscribe,
-  SubscribesActionTypes,
-  SubscribesState,
-} from '../../store/subscribes/types'
+// import {Subscribe, SubscribesActionTypes} from '../../store/subscribes/types'
 import {subscribesSelector} from '../../store/subscribes/subscribesSelector'
 import {makeHitSlop} from '../../constants/metrics'
 
 const SubscribesScreen = (props: {
-  subscribes?: any
-  dispatch: (arg0: SubscribesActionTypes) => void
+  subscribes: any
+  dispatch: (arg0: any) => void
 }) => {
   const navigation = useNavigation()
 
@@ -38,9 +34,9 @@ const SubscribesScreen = (props: {
         Abonnements
       </Text>
 
-      <FlatList<Subscribe>
+      <FlatList
         data={props.subscribes}
-        keyExtractor={(item: Subscribe) => item.name.toString()}
+        keyExtractor={(item) => item.name.toString()}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'flex-start',
@@ -106,7 +102,7 @@ const SubscribesScreen = (props: {
             </Box>
           </Box>
         }
-        renderItem={({item}: {item: Subscribe}) => (
+        renderItem={({item}) => (
           <TouchableOpacity
             onPress={() => navigation.navigate('PodcastDetails', {data: item})}>
             <Box mb="sm" radius="xs" bg={theme.color.blackLight}>
@@ -158,15 +154,13 @@ const s = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: SubscribesState) => {
+const mapStateToProps = (state: any) => {
   return {
     subscribes: subscribesSelector(state),
   }
 }
 
-const mapDispatchToProps = (
-  dispatch: (arg0: SubscribesActionTypes) => void,
-) => {
+const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
   return {
     dispatch: (action: any) => {
       dispatch(action)
