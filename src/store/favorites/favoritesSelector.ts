@@ -1,2 +1,3 @@
-export const favoritesSelector = (state: any) =>
-  state.favoritesReducer.favorites
+import {FavoritesState} from './types'
+
+export const favoritesSelector = (state: FavoritesState) => state.favorites

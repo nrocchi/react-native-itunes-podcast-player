@@ -453,8 +453,8 @@ const s = StyleSheet.create({
 const mapStateToProps = (state: any) => {
   console.log(state)
   return {
-    favorites: favoritesSelector(state),
-    subscribes: subscribesSelector(state),
+    favorites: favoritesSelector(state.favoritesReducer),
+    subscribes: subscribesSelector(state.subscribesReducer),
   }
 }
 

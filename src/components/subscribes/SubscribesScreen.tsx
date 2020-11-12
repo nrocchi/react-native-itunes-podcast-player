@@ -156,7 +156,7 @@ const s = StyleSheet.create({
 
 const mapStateToProps = (state: any) => {
   return {
-    subscribes: subscribesSelector(state),
+    subscribes: subscribesSelector(state.subscribesReducer),
   }
 }
 

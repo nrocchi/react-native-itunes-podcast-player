@@ -1,2 +1,3 @@
-export const subscribesSelector = (state: any) =>
-  state.subscribesReducer.subscribes
+import {SubscribesState} from './types'
+
+export const subscribesSelector = (state: SubscribesState) => state.subscribes
