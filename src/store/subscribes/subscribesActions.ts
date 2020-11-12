@@ -1,18 +1,3 @@
-// export const toggleSubscribeAction = (subscribe) => ({
-//   type: 'TOGGLE_SUBSCRIBE',
-//   value: {...subscribe},
-// })
-
-// export const deleteSubscribeAction = (subscribe) => ({
-//   type: 'DELETE_SUBSCRIBE',
-//   value: {...subscribe},
-// })
-
-// export const sortSubscribeAction = (sortType) => ({
-//   type: 'SORT_SUBSCRIBE',
-//   value: sortType,
-// })
-
 import {
   Subscribe,
   TOGGLE_SUBSCRIBE,

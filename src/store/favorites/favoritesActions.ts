@@ -1,18 +1,3 @@
-// export const toggleFavoriteAction = (favorite) => ({
-//   type: 'TOGGLE_FAVORITE',
-//   value: {...favorite},
-// })
-
-// export const deleteFavoriteAction = (favorite) => ({
-//   type: 'DELETE_FAVORITE',
-//   value: {...favorite},
-// })
-
-// export const sortFavoriteAction = (sortType) => ({
-//   type: 'SORT_FAVORITE',
-//   value: sortType,
-// })
-
 import {
   TOGGLE_FAVORITE,
   DELETE_FAVORITE,
