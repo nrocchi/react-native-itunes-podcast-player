@@ -8,6 +8,10 @@ export interface Subscribe {
   added: number
 }
 
+export interface SubscribesState {
+  subscribes: Subscribe[]
+}
+
 export const TOGGLE_SUBSCRIBE = 'TOGGLE_SUBSCRIBE'
 export const DELETE_SUBSCRIBE = 'DELETE_SUBSCRIBE'
 export const SORT_SUBSCRIBE = 'SORT_SUBSCRIBE'

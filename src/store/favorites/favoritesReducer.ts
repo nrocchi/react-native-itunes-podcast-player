@@ -3,14 +3,15 @@ import {
   DELETE_FAVORITE,
   SORT_FAVORITE,
   FavoritesActionTypes,
+  FavoritesState,
 } from './types'
 
-const initialState = {favorites: []}
+const initialState: FavoritesState = {favorites: []}
 
 function favoritesReducer(
   state = initialState,
   action: FavoritesActionTypes | any,
-): any {
+): FavoritesState {
   let nextState
   switch (action.type) {
     case TOGGLE_FAVORITE:

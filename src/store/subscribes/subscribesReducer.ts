@@ -4,14 +4,15 @@ import {
   DELETE_SUBSCRIBE,
   SORT_SUBSCRIBE,
   SubscribesActionTypes,
+  SubscribesState,
 } from './types'
 
-const initialState = {subscribes: []}
+const initialState: SubscribesState = {subscribes: []}
 
 function subscribesReducer(
   state = initialState,
   action: SubscribesActionTypes | any,
-): any {
+): SubscribesState {
   let nextState
   switch (action.type) {
     case TOGGLE_SUBSCRIBE:
