@@ -14,17 +14,17 @@ import HTMLReader from '../utils/HTMLReader'
 import {makeHitSlop} from '../../constants/metrics'
 import {favoritesSelector} from '../../store/favorites/favoritesSelector'
 import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
-import {subscribesSelector} from '../../store/subscribes/subscribesSelector'
+import {Favorite} from '../../store/favorites/types'
 
 const EpisodeDetailsScreen = (props: {
-  favorites?: any
+  favorites?: Favorite[]
   dispatch: (arg0: {type: string; value: any}) => void
 }) => {
   const routeParams = (useRoute().params ?? {}) as {
     episode: FeedQuery_feed
     podcast: SearchQuery_search
-    podcastThumb: String
-    podcastName: String
+    podcastThumb: string
+    podcastName: string
   }
   const playerContext = usePlayerContext()
   const navigation = useNavigation()
@@ -61,12 +61,9 @@ const EpisodeDetailsScreen = (props: {
               style={{overflow: 'hidden'}}>
               <Image
                 source={{
-                  uri:
-                    routeParams.episode.image ||
-                    (props.favorites && props.favorites.image)
-                      ? routeParams.episode.image || props.favorites.image
-                      : routeParams.podcast.thumbnail ||
-                        routeParams.podcastThumb,
+                  uri: routeParams.episode.image
+                    ? routeParams.episode.image
+                    : routeParams.podcast.thumbnail || routeParams.podcastThumb,
                 }}
                 style={{flex: 1}}
               />
@@ -74,16 +71,15 @@ const EpisodeDetailsScreen = (props: {
           </Box>
 
           <Text color="white" mb="xs" size="xl" bold>
-            {routeParams.episode.title || props.favorites.title}
+            {routeParams.episode.title}
           </Text>
           <Text color="grey" bold size="sm" mb="sm">
             {routeParams.podcast.artist || routeParams.podcastName}
           </Text>
 
-          {props.favorites.findIndex(
+          {props.favorites?.findIndex(
             (item: {linkUrl: string}) =>
-              item.linkUrl === routeParams.episode.linkUrl ||
-              props.favorites.linkUrl,
+              item.linkUrl === routeParams.episode.linkUrl,
           ) !== -1 ? (
             // The episode is in favorite redux state
             <Box center mb="sm">
@@ -143,7 +139,7 @@ const EpisodeDetailsScreen = (props: {
               bg="blackLight">
               <Box mr="sm">
                 {playerContext.currentTrack?.id ===
-                (routeParams.episode.linkUrl || props.favorites.linkUrl) ? (
+                routeParams.episode.linkUrl ? (
                   playerContext.isPaused ? (
                     <TouchableOpacity
                       onPress={() => playerContext.play()}
@@ -170,28 +166,15 @@ const EpisodeDetailsScreen = (props: {
                     hitSlop={makeHitSlop(20)}
                     onPress={() =>
                       playerContext.play({
-                        id:
-                          routeParams.episode.linkUrl ||
-                          props.favorites.linkUrl,
-                        title:
-                          routeParams.episode.title || props.favorites.title,
+                        id: routeParams.episode.linkUrl,
+                        title: routeParams.episode.title,
                         artwork:
                           routeParams.episode.image ||
-                          props.favorites.image ||
-                          routeParams.podcast.thumbnail ||
-                          props.favorites.thumbnail,
-                        url:
-                          routeParams.episode.linkUrl ||
-                          props.favorites.linkUrl,
-                        artist:
-                          routeParams.podcast.artist ||
-                          props.favorites.podcastName,
-                        date:
-                          routeParams.episode.pubDate ||
-                          props.favorites.pubDate,
-                        duration:
-                          routeParams.episode.duration ||
-                          props.favorites.duration,
+                          routeParams.podcast.thumbnail,
+                        url: routeParams.episode.linkUrl,
+                        artist: routeParams.podcast.artist,
+                        date: routeParams.episode.pubDate,
+                        duration: parseFloat(routeParams.episode.duration),
                       })
                     }>
                     <Icon
@@ -205,15 +188,12 @@ const EpisodeDetailsScreen = (props: {
               <Box>
                 <Text bold color="primary">
                   {playerContext.isPlaying &&
-                  playerContext.currentTrack?.id ===
-                    (routeParams.episode.linkUrl || props.favorites.linkUrl)
+                  playerContext.currentTrack?.id === routeParams.episode.linkUrl
                     ? 'Pause'
                     : 'Lecture'}
                 </Text>
                 <Text size="xs" color="white">
-                  {humanDuration(
-                    routeParams.episode.duration || props.favorites.duration,
-                  )}
+                  {humanDuration(routeParams.episode.duration)}
                 </Text>
               </Box>
             </Box>
@@ -227,33 +207,16 @@ const EpisodeDetailsScreen = (props: {
             radius="xs"
             bg={theme.color.blackLight}>
             <Text size="xs" mb="xs" color="white">
-              {getWeekDay(
-                new Date(
-                  routeParams.episode.pubDate || props.favorites.pubDate,
-                ),
-              )}{' '}
-              {new Date(
-                routeParams.episode.pubDate || props.favorites.pubDate,
-              ).getDate()}{' '}
-              {getMonth(
-                new Date(
-                  routeParams.episode.pubDate || props.favorites.pubDate,
-                ),
-              )}{' '}
-              {new Date(
-                routeParams.episode.pubDate || props.favorites.pubDate,
-              ).getFullYear()}
+              {getWeekDay(new Date(routeParams.episode.pubDate))}{' '}
+              {new Date(routeParams.episode.pubDate).getDate()}{' '}
+              {getMonth(new Date(routeParams.episode.pubDate))}{' '}
+              {new Date(routeParams.episode.pubDate).getFullYear()}
             </Text>
-            {routeParams.episode.description ||
-            props.favorites.description ||
-            routeParams.episode.summary ||
-            props.favorites.summary ? (
+            {routeParams.episode.description || routeParams.episode.summary ? (
               <HTMLReader
                 html={
-                  routeParams.episode.description ||
-                  (props.favorites && props.favorites.description)
-                    ? routeParams.episode.description ||
-                      props.favorites.description
+                  routeParams.episode.description
+                    ? routeParams.episode.description
                     : routeParams.episode.summary
                 }
               />
@@ -281,21 +244,23 @@ const EpisodeDetailsScreen = (props: {
             </Text> */}
           </Box>
 
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('PodcastDetails', {
-                data: routeParams.podcast || props.favorites,
-              })
-            }>
-            <Box dir="row" align="center" justify="between" mb="xl">
-              <Text color="grey">Voir tous les épisodes</Text>
-              <FontAwesome5
-                name={'chevron-right'}
-                color={theme.color.grey}
-                size={theme.text.size.xl}
-              />
-            </Box>
-          </TouchableOpacity>
+          {routeParams.podcast.feedUrl && (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('PodcastDetails', {
+                  data: routeParams.podcast,
+                })
+              }>
+              <Box dir="row" align="center" justify="between" mb="xl">
+                <Text color="grey">Voir tous les épisodes</Text>
+                <FontAwesome5
+                  name={'chevron-right'}
+                  color={theme.color.grey}
+                  size={theme.text.size.xl}
+                />
+              </Box>
+            </TouchableOpacity>
+          )}
         </Box>
       </ScrollView>
     </Box>

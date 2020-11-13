@@ -10,9 +10,9 @@ import {
 } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import {connect} from 'react-redux'
-
 import {useQuery} from '@apollo/react-hooks'
 import Icon from 'react-native-vector-icons/FontAwesome'
+
 import {theme} from '../../constants/theme'
 import {SearchStackRouteParamsList} from '../../navigators/types'
 import feedQuery from '../../graphql/query/feedQuery'
@@ -20,7 +20,6 @@ import {
   FeedQuery,
   FeedQuery_feed,
   FeedQueryVariables,
-  SearchQuery_search,
 } from '../../types/graphql'
 import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
@@ -29,20 +28,19 @@ import {favoritesSelector} from '../../store/favorites/favoritesSelector'
 import {toggleFavoriteAction} from '../../store/favorites/favoritesActions'
 import {subscribesSelector} from '../../store/subscribes/subscribesSelector'
 import {toggleSubscribeAction} from '../../store/subscribes/subscribesActions'
+import {Favorite} from '../../store/favorites/types'
+import {Subscribe} from '../../store/subscribes/types'
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>
 
 const PodcastDetailsScreen = (props: {
-  favorites?: any
-  subscribes?: any
+  favorites?: Favorite[]
+  subscribes?: Subscribe[]
   dispatch: (arg0: {type: string; value: any}) => void
 }) => {
   const playerContext = usePlayerContext()
   const navigation = useNavigation()
-  const routeParams = (useRoute().params ?? {}) as {
-    episode: FeedQuery_feed
-    podcast: SearchQuery_search
-  }
+
   const {data: podcastData} = useRoute<NavigationParams>().params ?? {}
 
   const {data, loading} = useQuery<FeedQuery, FeedQueryVariables>(feedQuery, {
@@ -51,20 +49,7 @@ const PodcastDetailsScreen = (props: {
     },
   })
 
-  const genres = podcastData.genres.toString().split(',')
-
-  console.log('*******************************************************')
-  console.log(data?.feed)
-  console.log('*********************************************************')
-  console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-  console.log(props)
-  console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-  console.log('-------------------------------------------------------')
-  console.log(props.subscribes)
-  console.log('-------------------------------------------------------')
-  console.log('/////////////////////////////////////////////////////')
-  console.log(props.favorites)
-  console.log('/////////////////////////////////////////////////////')
+  const genres = podcastData?.genres.toString().split(',')
 
   function _toggleSubscribe() {
     const podcastInfo = {
@@ -127,10 +112,9 @@ const PodcastDetailsScreen = (props: {
                   {podcastData.artist}
                 </Text>
                 <Box dir="row" align="center">
-                  {props.subscribes.findIndex(
+                  {props.subscribes?.findIndex(
                     (item: {feedUrl: string}) =>
-                      item.feedUrl === podcastData.feedUrl ||
-                      props.subscribes.feedUrl,
+                      item.feedUrl === podcastData.feedUrl,
                   ) !== -1 ? (
                     <TouchableOpacity onPress={() => _toggleSubscribe()}>
                       <Box
@@ -304,7 +288,7 @@ const PodcastDetailsScreen = (props: {
                     </Text>
                   </Box>
 
-                  {props.favorites.findIndex(
+                  {props.favorites?.findIndex(
                     (fav: {linkUrl: string}) => fav.linkUrl === item.linkUrl,
                   ) !== -1 ? (
                     // The episode is in favorite redux state
@@ -451,7 +435,6 @@ const s = StyleSheet.create({
 })
 
 const mapStateToProps = (state: any) => {
-  console.log(state)
   return {
     favorites: favoritesSelector(state.favoritesReducer),
     subscribes: subscribesSelector(state.subscribesReducer),

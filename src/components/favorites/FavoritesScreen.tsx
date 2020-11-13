@@ -5,6 +5,7 @@ import {FlatList, Image, StyleSheet, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Icon from 'react-native-vector-icons/FontAwesome'
+
 import {theme} from '../../constants/theme'
 import {getMonth, humanDuration} from '../../lib/dateTimeHelpers'
 import {usePlayerContext} from '../../context/PlayerContext'
@@ -14,9 +15,10 @@ import {
   deleteFavoriteAction,
   sortFavoriteAction,
 } from '../../store/favorites/favoritesActions'
+import {Favorite} from '../../store/favorites/types'
 
 const FavoritesScreen = (props: {
-  favorites: any
+  favorites: Favorite[] | any
   dispatch: (arg0: any) => void
 }) => {
   const navigation = useNavigation()
@@ -36,7 +38,7 @@ const FavoritesScreen = (props: {
         Favoris
       </Text>
 
-      <FlatList
+      <FlatList<Favorite>
         data={props.favorites}
         keyExtractor={(item) => item.linkUrl.toString()}
         contentContainerStyle={{

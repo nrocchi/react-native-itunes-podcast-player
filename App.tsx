@@ -9,6 +9,7 @@ import {ActivityIndicator} from 'react-native'
 import {PersistGate} from 'redux-persist/integration/react'
 import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
+
 import {theme} from './src/constants/theme'
 import MainStackNavigator from './src/navigators/MainStackNavigator'
 import {client} from './src/graphql/client'
@@ -22,9 +23,7 @@ const App = () => {
 
   React.useEffect(() => {
     SplashScreen.hide()
-  }, [])
 
-  React.useEffect(() => {
     TrackPlayer.setupPlayer().then(() => {
       TrackPlayer.updateOptions({
         capabilities: [
